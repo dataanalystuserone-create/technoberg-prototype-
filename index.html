@@ -1,0 +1,1393 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TechnoBerg - Exploring Tomorrow's Technologies</title>
+<meta name="description" content="Global technology, product engineering and applied R&amp;D company.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Inter:wght@400;500&display=swap">
+<style>
+:root{
+  /* Locked by the client's audit. Not open for redecoration. */
+  --bg:#06010E; --bg2:#12051E; --bg3:#190539;
+  --ep:#5215A1; --nv:#7E35CD; --lp:#B064DA; --tm:#A83C8A; --cr:#91192B; --red:#E12024;
+  --tx:#FFFFFF; --tx2:#EDEAF2; --tx3:rgba(237,234,242,.76); --tx4:rgba(237,234,242,.52);
+  --line:rgba(237,234,242,.12); --line2:rgba(176,100,218,.28);
+  --display:"Plus Jakarta Sans",system-ui,sans-serif;
+  --body:"Inter",system-ui,sans-serif;
+  --wrap:1560px;
+  --hdr:70px;
+  /* The built-in easings are too weak to read as intentional. */
+  --out:cubic-bezier(.23,1,.32,1);
+  --inout:cubic-bezier(.77,0,.175,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-block-start:var(--hdr)}
+body{margin:0;background:var(--bg);color:var(--tx2);font-family:var(--body);
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{font-family:var(--display);color:var(--tx);margin:0;letter-spacing:-.028em;line-height:1.04}
+p{margin:0}
+:focus-visible{outline:2px solid var(--lp);outline-offset:3px;border-radius:4px}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:clamp(20px,3.4vw,60px)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.defs{position:absolute;width:0;height:0;overflow:hidden}
+
+/* ---- load splash ------------------------------------------------------
+   It clears itself with a CSS animation ending in visibility:hidden, so it
+   goes away even if the script never runs. An overlay that needs JavaScript
+   to stop covering the page is one broken script away from a blank site. */
+.splash{position:fixed;inset:0;z-index:90;display:grid;place-items:center;
+  background:var(--bg);animation:splashout .52s var(--out) 1.02s forwards}
+.splash svg{width:min(216px,44vw);height:auto;
+  animation:splashin .72s var(--out) both}
+@keyframes splashin{from{opacity:0;transform:translateY(12px) scale(.97)}}
+@keyframes splashout{to{opacity:0;visibility:hidden;pointer-events:none}}
+/* Already seen this session: never rendered at all, so there is no flash. */
+.splash[hidden]{display:none}
+@media (prefers-reduced-motion: reduce){
+  /* Nothing here is information, so there is nothing to degrade to. */
+  .splash{display:none}
+}
+
+/* ---- header ---------------------------------------------------------- */
+/* Keyboard users meet eight links before any content, on every load. */
+.skip{position:fixed;inset-block-start:10px;inset-inline-start:10px;z-index:70;
+  padding:11px 18px;border-radius:100px;background:var(--bg3);color:var(--tx);
+  border:1px solid var(--line2);font-size:14px;
+  transform:translateY(-220%);transition:transform .2s var(--out)}
+.skip:focus-visible{transform:none;outline:2px solid var(--lp);outline-offset:2px}
+/* A 1px marker at the scroll depth where the header should solidify. An
+   observer on this replaces a scroll handler firing on every frame. */
+.hdrsentinel{position:absolute;inset-block-start:40px;inset-inline-start:0;
+  width:1px;height:1px;pointer-events:none}
+#hdr{position:fixed;inset-block-start:0;inset-inline:0;z-index:50;height:var(--hdr);
+  display:flex;align-items:center;
+  background:linear-gradient(180deg,rgba(6,1,14,.94),rgba(6,1,14,.6) 62%,transparent);
+  transition:background .3s var(--out)}
+/* Glass, to match the position-statement panel - but on a pseudo-element, not
+   on the header. backdrop-filter on the header itself would make it a
+   containing block for position:fixed descendants, and the mobile sheet is
+   one: it would resolve top/bottom against a 70px header instead of the
+   viewport and collapse to a single visible link. */
+#hdr::before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;
+  pointer-events:none;background:rgba(6,1,14,.66);
+  -webkit-backdrop-filter:blur(20px) saturate(165%);
+  backdrop-filter:blur(20px) saturate(165%);
+  transition:opacity .3s var(--out)}
+#hdr.solid{background:transparent;border-block-end:1px solid var(--line)}
+#hdr.solid::before{opacity:1}
+@supports not ((-webkit-backdrop-filter:blur(2px)) or (backdrop-filter:blur(2px))){
+  #hdr::before{background:rgba(6,1,14,.97)}
+}
+@media (prefers-reduced-transparency:reduce){
+  #hdr::before{-webkit-backdrop-filter:none;backdrop-filter:none;
+    background:rgba(6,1,14,.97)}
+}
+/* Two equal rails around an auto centre track, so the nav sits on the header's
+   true centre line and not merely between two unequal neighbours. */
+#hdr .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;gap:clamp(14px,2vw,38px);width:100%}
+.brand{justify-self:start;display:flex;align-items:center}
+.brand svg{display:block;height:32px;width:auto}
+#nav{display:flex;align-items:center;justify-content:center;
+  gap:clamp(12px,1.35vw,25px)}
+#nav a{font-size:14.5px;color:var(--tx3);white-space:nowrap;padding-block:6px;position:relative;
+  transition:color .18s var(--out)}
+#nav a::after{content:"";position:absolute;inset-block-end:0;inset-inline-start:0;height:1px;width:0;
+  background:rgba(176,100,218,.55);transition:width .22s var(--out)}
+#nav a:focus-visible{outline:2px solid var(--lp);outline-offset:4px;border-radius:3px}
+/* Where you are. Nine sections and eight links with no current state was the
+   header's actual deficiency; aria-current carries it to assistive technology
+   rather than leaving it as a colour. */
+#nav a[aria-current]{color:var(--tx)}
+#nav a[aria-current]::after{width:100%;background:var(--lp)}
+.tools{justify-self:end;display:flex;align-items:center;gap:9px}
+.lang{display:flex;border:1px solid var(--line);border-radius:100px;overflow:hidden}
+.lang button{font:inherit;font-size:11.5px;letter-spacing:.05em;padding:8px 14px;color:var(--tx3);
+  background:none;border:0;cursor:pointer;min-height:40px;transition:color .18s var(--out)}
+.lang button:focus-visible{outline:2px solid var(--lp);outline-offset:-2px}
+.lang button[aria-pressed=true]{background:rgba(176,100,218,.18);color:var(--tx)}
+.cart,.burger{display:grid;place-items:center;width:40px;height:40px;flex:none;border:1px solid var(--line);
+  border-radius:10px;color:var(--tx2);background:none;cursor:pointer;transition:border-color .2s var(--out)}
+.cart:focus-visible,.burger:focus-visible{outline:2px solid var(--lp);outline-offset:2px}
+/* A finger is not a mouse pointer. */
+@media(pointer:coarse){
+  .cart,.burger{width:44px;height:44px}
+  .lang button{min-height:44px}
+}
+.cart svg,.burger svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round}
+.burger{display:none}
+@media(hover:hover) and (pointer:fine){
+  #nav a:hover{color:var(--tx)}
+  #nav a:hover::after{width:100%}
+  .cart:hover,.burger:hover{border-color:var(--lp)}
+  .lang button:hover{color:var(--tx)}
+}
+@media(max-width:1180px){
+  /* The sheet is fixed, so it leaves the grid flow and the tools would slide
+     into the centre track. Back to flex here. */
+  #hdr .wrap{display:flex;justify-content:space-between}
+  #nav{position:fixed;inset-block-start:var(--hdr);inset-inline:0;inset-block-end:0;z-index:49;
+    flex-direction:column;align-items:stretch;gap:0;padding:14px clamp(20px,3.4vw,60px) 40px;
+    background:var(--bg);border-block-start:1px solid var(--line);overflow-y:auto;
+    visibility:hidden;opacity:0;transition:opacity .22s var(--out),visibility .22s step-end}
+  #nav.open{visibility:visible;opacity:1;transition:opacity .22s var(--out),visibility 0s}
+  #nav a{font-family:var(--display);font-size:20px;color:var(--tx2);display:flex;align-items:center;
+    min-height:54px;border-block-end:1px solid var(--line);
+    opacity:0;transform:translateY(9px);
+    transition:opacity .34s var(--out),transform .34s var(--out)}
+  #nav.open a{opacity:1;transform:none}
+  /* 45ms apart: enough to read as a sequence, short enough that the last link
+     lands well inside the sheet's own fade. */
+  #nav.open a:nth-child(1){transition-delay:.05s}
+  #nav.open a:nth-child(2){transition-delay:.095s}
+  #nav.open a:nth-child(3){transition-delay:.14s}
+  #nav.open a:nth-child(4){transition-delay:.185s}
+  #nav.open a:nth-child(5){transition-delay:.23s}
+  #nav.open a:nth-child(6){transition-delay:.275s}
+  #nav.open a:nth-child(7){transition-delay:.32s}
+  #nav.open a:nth-child(8){transition-delay:.365s}
+  #nav a::after{content:none}
+  .burger{display:grid}
+}
+
+/* ---- the stage: one background under the hero and the section after it --
+   Sticky, not fixed. Fixed keeps painting behind everything below and needs
+   JS to switch off; sticky releases itself when the stage ends. */
+/* herostage, not stage: .stage already names the four process cards further
+   down, and their padding clamp was resolving onto this wrapper and pushing
+   the background 34px clear of the top of the page. Two different things
+   cannot share a class name. */
+.herostage{position:relative}
+/* The background lives in its own absolutely positioned layer spanning the
+   stage, and sticks inside that. The previous version used a negative bottom
+   margin to let the sections overlap it, which works visually and breaks the
+   release: sticky unpins against the MARGIN box, so a -100svh margin kept it
+   pinned for a full extra viewport and the image carried on into the section
+   below. With a wrapper there is no margin to lie about, and it releases
+   exactly where the stage ends. */
+.bgwrap{position:absolute;inset:0;z-index:0;pointer-events:none}
+.stagebg{position:sticky;inset-block-start:0;height:100svh;overflow:hidden;
+  background:var(--bg)}
+.bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  object-position:50% 50%}
+/* The scrim. The rendered field this replaced was dark on the left by
+   construction, so the headline needed nothing. A photograph is only dark on
+   the left until it is cropped, and the hero crops hard on a phone. */
+/* Two layers, because the copy is in the lower left and the picture is worth
+   seeing in the upper right. The horizontal one protects the column the text
+   sits in; the vertical one covers the band it sits in. Where they overlap,
+   under the headline, they compound. The first version faded to .04 by 78%
+   across and the headline runs to 77%, so its right end sat on the lit shaft
+   at 1.5:1 against white. */
+.stagebg::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(to right,rgba(6,1,14,.95) 0%,rgba(6,1,14,.86) 26%,
+      rgba(6,1,14,.62) 52%,rgba(6,1,14,.34) 74%,rgba(6,1,14,.14) 100%),
+    linear-gradient(to top,rgba(6,1,14,.94) 0%,rgba(6,1,14,.66) 26%,
+      rgba(6,1,14,.22) 52%,transparent 74%)}
+/* In Arabic the headline moves to the other side, so the scrim follows it. */
+[dir="rtl"] .stagebg::before{transform:scaleX(-1)}
+#field{position:absolute;inset:0;width:100%;height:100%}
+.stagebg::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:var(--grain,none)}
+/* The stage dissolves into the page ground rather than stopping at an edge. */
+.herostage::after{content:"";position:absolute;inset-inline:0;inset-block-end:0;height:230px;
+  z-index:0;pointer-events:none;background:linear-gradient(180deg,transparent,var(--bg))}
+
+/* ---- hero ------------------------------------------------------------ */
+.hero{position:relative;z-index:1;min-height:100svh;display:grid;align-items:end}
+.hero .wrap{position:relative;z-index:2;width:100%;padding-block:var(--hdr) clamp(58px,9vh,120px)}
+.hero h1{font-weight:300;font-size:clamp(2.9rem,7.6vw,7.1rem);line-height:.9;letter-spacing:-.035em;
+  max-width:14ch}
+.hero h1 em{font-style:normal;font-weight:500;color:var(--lp)}
+.lede{margin-block-start:clamp(26px,3.6vh,40px);max-width:52ch;font-size:clamp(16px,1.25vw,19px);
+  color:var(--tx3)}
+.acts{display:flex;flex-wrap:wrap;gap:12px;margin-block-start:clamp(26px,3.6vh,40px)}
+.btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--display);font-weight:500;
+  font-size:15px;min-height:52px;padding-inline:28px;border-radius:100px;color:var(--tx);
+  background:linear-gradient(100deg,var(--ep),var(--tm));border:1px solid transparent;
+  /* Inner highlight above, inner shade below, and a shadow tinted to the brand
+     rather than black. These are what separate a lit surface from a filled
+     rectangle. */
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.2),
+    0 6px 20px rgba(82,21,161,.3);
+  transition:transform .14s var(--out),box-shadow .26s var(--out),
+    background-color .26s var(--out),border-color .26s var(--out)}
+.btn:focus-visible{outline:2px solid var(--lp);outline-offset:3px}
+/* A ghost button on a photograph is the contrast failure the craft rules call
+   out by name: with background:none its legibility is whatever the picture is
+   doing behind it. This one brings its own backdrop. */
+.btn.ghost{background:rgba(9,4,20,.44);border-color:rgba(237,234,242,.3);color:var(--tx);
+  -webkit-backdrop-filter:blur(14px) saturate(150%);
+  backdrop-filter:blur(14px) saturate(150%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+@supports not ((-webkit-backdrop-filter:blur(2px)) or (backdrop-filter:blur(2px))){
+  .btn.ghost{background:rgba(9,4,20,.84)}
+}
+@media (prefers-reduced-transparency:reduce){
+  .btn.ghost{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(9,4,20,.88)}
+}
+.btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;
+  stroke-linejoin:round;transition:transform .34s var(--out)}
+@media(hover:hover) and (pointer:fine){
+  .btn:hover{transform:translateY(-2px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.26),inset 0 -1px 0 rgba(0,0,0,.2),
+      0 14px 38px rgba(82,21,161,.46)}
+  .btn.ghost:hover{transform:translateY(-2px);border-color:var(--lp);
+    background:rgba(82,21,161,.36);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+  .btn:hover svg{transform:translateX(3px)}
+}
+/* After the hover block on purpose: a press has to win over the hover lift,
+   and at equal specificity that is decided by source order. */
+.btn:active{transform:scale(.97)}
+
+/* ---- shared section furniture --------------------------------------- */
+section{position:relative}
+.sec{padding-block:clamp(84px,11vh,168px)}
+.eyebrow{font-family:var(--display);font-size:12.5px;font-weight:500;letter-spacing:.02em;
+  color:var(--lp);margin-block-end:18px}
+h2{font-weight:400;font-size:clamp(1.9rem,3.9vw,3.5rem);max-width:19ch}
+.sub{margin-block-start:20px;max-width:62ch;font-size:16.5px;color:var(--tx3)}
+
+/* ---- glass ------------------------------------------------------------
+   The edge is what sells it. A blur alone reads as a smudge; the inner
+   highlight along the top is light catching a bevel, the darker line under it
+   is the far edge of the same bevel, and the saturation lift bends colour
+   through the panel instead of draining it. */
+.glasssec{position:relative;z-index:1;padding-block:clamp(34px,5vh,70px) clamp(84px,11vh,150px)}
+.glass{
+  position:relative;border-radius:26px;overflow:hidden;
+  padding:clamp(32px,4.4vw,72px) clamp(24px,3.4vw,58px);
+  background:linear-gradient(152deg,rgba(255,255,255,.075),rgba(255,255,255,.018) 46%,
+    rgba(176,100,218,.05));
+  border:1px solid rgba(255,255,255,.10);
+  -webkit-backdrop-filter:blur(26px) saturate(165%);
+  backdrop-filter:blur(26px) saturate(165%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),
+             inset 0 -1px 0 rgba(255,255,255,.035),
+             0 40px 110px rgba(0,0,0,.52);
+}
+/* A soft sheen across the top left, where the key light would strike it. */
+.glass::before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:radial-gradient(74% 46% at 18% 0%,rgba(255,255,255,.09),transparent 62%)}
+/* Solid ground under the blur, so text never sits directly on the image even
+   for the frame before the filter resolves. */
+.glass::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;
+  background:rgba(12,5,26,.34)}
+
+/* backdrop-filter is the most commonly shipped-broken property on the web. */
+@supports not ((-webkit-backdrop-filter:blur(2px)) or (backdrop-filter:blur(2px))){
+  .glass{background:rgba(14,6,28,.9)}
+}
+@media (prefers-reduced-transparency:reduce){
+  .glass{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(14,6,28,.95)}
+}
+
+/* ---- position statement ---------------------------------------------- */
+.stmt{font-family:var(--display);font-weight:300;font-size:clamp(1.5rem,3.2vw,2.9rem);
+  line-height:1.2;letter-spacing:-.024em;color:var(--tx);max-width:26ch}
+.stmt span{opacity:.22;transition:opacity .22s linear}
+.figs{margin-block-start:clamp(44px,6vh,78px);display:grid;gap:1px;
+  background:rgba(255,255,255,.09);grid-template-columns:repeat(4,1fr);
+  border-block:1px solid rgba(255,255,255,.09)}
+/* Transparent inside the glass, so the panel reads as one sheet rather than
+   opaque tiles sitting on top of it. */
+.fig{background:transparent;padding:clamp(22px,2.4vw,34px) clamp(16px,1.8vw,26px)}
+.fig b{display:block;width:fit-content;font-family:var(--display);font-weight:300;
+  font-size:clamp(2.4rem,4.4vw,4rem);line-height:1;letter-spacing:-.04em;
+  background-image:linear-gradient(100deg,#B064DA,#A83C8A 52%,#E12024);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.fig span{display:block;margin-block-start:12px;font-size:14.5px;color:var(--tx2)}
+.fig cite{display:block;margin-block-start:6px;font-size:12px;font-style:normal;color:var(--tx4)}
+
+/* ---- capabilities index (the one bold element) ----------------------- */
+/* The stage is tall; everything inside the sticky block pins together - the
+   heading included, which is what keeps it up while the dial turns. */
+.capsstage{position:relative;height:300vh}
+.capsticky{position:sticky;inset-block-start:var(--hdr);height:calc(100vh - var(--hdr));
+  display:flex;flex-direction:column;justify-content:center;
+  padding-block:clamp(16px,3vh,40px)}
+.caps{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.62fr);gap:clamp(24px,3vw,56px);
+  align-items:center;margin-block-start:clamp(20px,3vh,40px);flex:1;min-height:0}
+
+/* The arc. Spokes are placed by coordinate, not by rotating a container and
+   counter-rotating the type, so the labels are upright by construction. */
+.capidx{position:relative;list-style:none;margin:0;padding:0;height:100%;min-height:0}
+.capidx li{position:absolute;inset-block-start:50%;inset-inline-start:0;
+  width:max-content;max-width:min(30ch,100%);
+  will-change:transform,opacity}
+.capbtn{display:flex;align-items:baseline;gap:14px;padding-block:6px;
+  background:none;border:0;cursor:pointer;text-align:start;font-family:var(--display);
+  font-weight:300;font-size:clamp(1.05rem,1.85vw,1.7rem);line-height:1.14;letter-spacing:-.026em;
+  color:var(--tx4);white-space:nowrap;
+  transition:color .3s var(--out)}
+.capbtn i{font-style:normal;font-family:var(--body);font-size:11.5px;color:var(--tx4);flex:none;
+  min-width:20px;transition:color .3s var(--out)}
+.capidx li[data-on] .capbtn{color:var(--tx)}
+.capidx li[data-on] .capbtn i{color:var(--lp)}
+/* The spoke at the focus point gets a mark, so the dial has a read head. */
+.capidx li[data-on]::before{content:"";position:absolute;inset-block-start:50%;
+  inset-inline-start:-19px;width:7px;height:7px;margin-block-start:-3px;border-radius:50%;
+  background:var(--red);box-shadow:0 0 0 4px rgba(225,32,36,.2)}
+@media(hover:hover) and (pointer:fine){.capbtn:hover{color:var(--tx2)}}
+.cappanel{position:sticky;inset-block-start:calc(var(--hdr) + 5vh);
+  border:1px solid var(--line);border-radius:20px;overflow:hidden;
+  background:linear-gradient(165deg,rgba(82,21,161,.16),rgba(6,1,14,0) 62%)}
+/* All nine sit stacked and crossfade. Swapping one src would flash on every
+   change, and 36 KB total is less than a single photograph. */
+/* overflow clipped here as well as on the panel: the zoom happens at the top
+   of the panel, and without this it would ride over the heading beneath. */
+.capmedia{position:relative;aspect-ratio:16/10;background:var(--bg2);overflow:hidden}
+.capmedia img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;
+  transition:opacity .42s var(--out),transform .55s var(--out);transform:scale(1.05)}
+.capmedia img[data-on]{opacity:1;transform:scale(1)}
+/* A photograph easing forward under the cursor is ambient, not a response to a
+   press, so it takes 550ms rather than the 160ms a button would. Fine pointers
+   only: on a phone this would fire on tap and stay zoomed. */
+@media(hover:hover) and (pointer:fine){
+  .cappanel:hover .capmedia img[data-on]{transform:scale(1.075)}
+}
+.capmedia::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,1,14,.16) 0%,transparent 34%,rgba(6,1,14,.82) 100%)}
+.capdemo{position:absolute;inset-block-end:11px;inset-inline-start:13px;z-index:2;font-size:10.5px;
+  letter-spacing:.04em;color:var(--tx3);background:rgba(6,1,14,.66);border:1px solid var(--line);
+  padding:4px 9px;border-radius:100px}
+.capbody{padding:clamp(22px,2.6vw,34px)}
+.cappanel h3{font-weight:400;font-size:clamp(1.15rem,1.7vw,1.6rem)}
+.cappanel p{margin-block-start:13px;font-size:15.5px;color:var(--tx3)}
+.capswap{transition:opacity .2s var(--out),transform .24s var(--out)}
+.capswap.out{opacity:0;transform:translateY(5px)}
+
+/* ---- process --------------------------------------------------------- */
+.stages{margin-block-start:clamp(38px,5vh,62px);display:grid;
+  grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line)}
+.stage{background:var(--bg);padding:clamp(24px,2.4vw,34px) clamp(18px,1.8vw,26px);
+  position:relative;transition:background .3s var(--out)}
+.stage b{display:block;font-family:var(--display);font-weight:500;font-size:16.5px;color:var(--tx)}
+.stage p{margin-block-start:10px;font-size:14.5px;color:var(--tx3)}
+.stage::before{content:"";position:absolute;inset-block-start:0;inset-inline:0;height:1px;
+  background:linear-gradient(90deg,var(--lp),transparent);transform:scaleX(0);transform-origin:left;
+  transition:transform .5s var(--out)}
+.stage[data-in]::before{transform:scaleX(1)}
+
+/* ---- the four stages -------------------------------------------------
+   A rail per stage with a node at its start. The rail draws on arrival, in
+   order, because the order is the point. */
+/* clip, not hidden: `clip` is the one value that can sit opposite
+   `visible` without coercing the other axis, and the big outlined numerals
+   hang below the rail on purpose. Without this the beam reaches 150px past
+   wherever it sits and the page scrolls sideways. */
+.flow{position:relative;overflow-x:clip;
+  margin-block-start:clamp(42px,6vh,76px);display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(18px,2.2vw,40px);
+  list-style:none;padding:0}
+/* Bottom padding is the numeral's room. Without it the glyph sits straight
+   through the description and the outline crosses every line of it, which
+   reads as a print error rather than a device. */
+.fstep{position:relative;padding-block:44px 62px;
+  transition:transform .32s var(--out)}
+/* the unlit rail */
+.fstep::before{content:"";position:absolute;inset-block-start:10px;inset-inline:0;
+  height:1px;background:var(--line)}
+/* the lit rail, drawn on arrival */
+.fstep::after{content:"";position:absolute;inset-block-start:10px;inset-inline-start:0;
+  inline-size:100%;height:1px;background:linear-gradient(90deg,var(--lp),var(--tm));
+  transform:scaleX(0);transform-origin:left;transition:transform .72s var(--out)}
+[dir="rtl"] .fstep::after{background:linear-gradient(270deg,var(--lp),var(--tm));
+  transform-origin:right}
+.flow[data-in] .fstep::after{transform:scaleX(1)}
+.flow[data-in] .fstep:nth-child(2)::after{transition-delay:.17s}
+.flow[data-in] .fstep:nth-child(3)::after{transition-delay:.34s}
+.flow[data-in] .fstep:nth-child(4)::after{transition-delay:.51s}
+.fnode{position:absolute;inset-block-start:4px;inset-inline-start:0;width:13px;height:13px;
+  border-radius:50%;border:1px solid var(--line2);background:var(--bg);
+  transition:background-color .4s var(--out),border-color .4s var(--out),
+    box-shadow .4s var(--out),transform .32s var(--out)}
+.flow[data-in] .fnode{border-color:var(--lp);background:var(--lp);
+  box-shadow:0 0 0 4px rgba(176,100,218,.16)}
+.flow[data-in] .fstep:nth-child(2) .fnode{transition-delay:.17s}
+.flow[data-in] .fstep:nth-child(3) .fnode{transition-delay:.34s}
+.flow[data-in] .fstep:nth-child(4) .fnode{transition-delay:.51s}
+/* Outlined, not filled. A filled numeral this size has to sit at an opacity
+   so low it reads as a smudge; anything higher competes with the copy over
+   it. An outline carries the shape for a fraction of the ink. */
+.fbig{position:absolute;inset-block-end:-10px;inset-inline-end:-2px;z-index:0;
+  font-family:var(--display);font-weight:600;font-size:clamp(3.6rem,5.4vw,5.8rem);
+  line-height:.78;letter-spacing:-.055em;color:transparent;pointer-events:none;
+  -webkit-text-stroke:1px rgba(176,100,218,.2);
+  transition:-webkit-text-stroke-color .32s var(--out),transform .38s var(--out)}
+.fstep b,.fstep p{position:relative;z-index:1}
+.fstep b{display:block;font-family:var(--display);font-weight:500;font-size:clamp(15px,1.25vw,17.5px);
+  line-height:1.25;color:var(--tx);transition:color .28s var(--out)}
+.fstep p{margin-block-start:10px;font-size:14.5px;color:var(--tx3)}
+/* The travelling light. Its x is written by JS each frame; everything it
+   triggers is an attribute the CSS reacts to, so only this one element is
+   touched per frame. */
+.flowglow{position:absolute;inset-block-start:10px;inset-inline-start:0;
+  width:300px;height:1px;margin-inline-start:-150px;pointer-events:none;
+  opacity:0;transition:opacity .34s var(--out);will-change:transform}
+/* Brand red, which is otherwise almost absent from this page. A red light
+   sweeping a violet system reads as a separate instrument rather than more of
+   the same colour, and it is the one place red can carry weight here without
+   landing on text - red measures 4.35:1 on this ground, fine for a glow,
+   not fine for a paragraph. Pitched a little lower than the violet it
+   replaces because red reads hotter at the same alpha. */
+.flowglow::before{content:"";position:absolute;inset-block-start:-46px;inset-inline-start:0;
+  width:300px;height:92px;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(225,32,36,.30),rgba(145,25,43,.13) 52%,transparent 74%)}
+.flowglow::after{content:"";position:absolute;inset-block-start:-1px;inset-inline-start:110px;
+  width:80px;height:3px;border-radius:3px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent);filter:blur(1px)}
+.flow[data-live] .flowglow{opacity:1}
+
+/* The nearest stage answers. Discrete, so CSS transitions handle it, and it
+   degrades to nothing on a device with no pointer. */
+/* The light tints what it lands on. Same specificity as the violet rule that
+   sets the resting node (.flow[data-in] .fnode), so this only wins because it
+   comes later in the sheet - an equal-specificity ordering dependency, which
+   is fragile enough to be worth naming here rather than discovering later. */
+.fstep[data-near] .fnode{transform:scale(1.32);
+  background:var(--red);border-color:var(--red);
+  box-shadow:0 0 0 7px rgba(225,32,36,.24)}
+.fstep[data-near] .fbig{-webkit-text-stroke-color:rgba(225,32,36,.58);
+  transform:translateY(-4px)}
+.fstep[data-near] p{color:var(--tx2)}
+.fstep[data-near]{transform:translateY(-3px)}
+
+@media(hover:hover) and (pointer:fine){
+  .fstep:hover{transform:translateY(-3px)}
+  .fstep:hover .fnode{transform:scale(1.25);background:var(--red);border-color:var(--red);
+    box-shadow:0 0 0 6px rgba(225,32,36,.22)}
+  .fstep:hover .fbig{-webkit-text-stroke-color:rgba(225,32,36,.5)}
+}
+
+/* ---- industries: a track the reader pushes ---------------------------
+   No 100vw bleed. It would need the viewport width, which on Windows counts
+   the scrollbar and fights the overflow-x:hidden on body. A half-visible card
+   at the edge says "there is more" just as well and cannot break. */
+.indtrack{margin-block-start:clamp(34px,4.5vh,58px);overflow-x:auto;overflow-y:hidden;
+  scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none;
+  padding-block-end:6px}
+.indtrack::-webkit-scrollbar{display:none}
+.indtrack:focus-visible{outline:2px solid var(--lp);outline-offset:4px;border-radius:12px}
+.indrail{display:flex;gap:clamp(12px,1.2vw,18px);width:max-content}
+.indcard{scroll-snap-align:start;flex:none;
+  width:clamp(252px,25.5vw,366px);min-height:clamp(286px,32vh,344px);
+  border:1px solid var(--line);border-radius:18px;
+  padding:clamp(22px,2.1vw,30px);display:flex;flex-direction:column;
+  position:relative;overflow:hidden;isolation:isolate;
+  transition:border-color .3s var(--out),transform .3s var(--out)}
+/* Layered by explicit z-index, not paint order: ::after is a last child, so a
+   wash left to DOM order would sit on top of the type. */
+.indshot{position:absolute;inset:0;z-index:0;width:100%;height:100%;
+  object-fit:cover;transform:scale(1.02);
+  transition:transform .62s var(--out)}
+.indcard::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(168deg,rgba(9,9,12,.18),rgba(9,9,12,.6) 50%),
+    linear-gradient(0deg,rgba(9,9,12,.5),transparent 44%);
+  transition:opacity .42s var(--out)}
+.indcard::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  opacity:0;background:linear-gradient(168deg,rgba(82,21,161,.26),transparent 64%);
+  transition:opacity .42s var(--out)}
+.indcard>:not(.indshot){position:relative;z-index:3}
+.indico{width:42px;height:42px;display:grid;place-items:center;border-radius:11px;
+  border:1px solid rgba(255,255,255,.22);margin-block-end:auto;
+  background:rgba(9,9,12,.42);backdrop-filter:blur(6px);
+  transition:border-color .3s var(--out),background-color .3s var(--out)}
+.indico svg{width:21px;height:21px;fill:none;stroke:var(--lp);stroke-width:1.5;
+  transition:stroke .3s var(--out)}
+.indcard h3{margin-block-start:26px;font-weight:500;font-size:clamp(1rem,1.25vw,1.18rem);
+  line-height:1.24}
+.indcard p{margin-block-start:11px;font-size:14px;color:var(--tx3)}
+@media(hover:hover) and (pointer:fine){
+  .indcard:hover{border-color:var(--line2);transform:translateY(-4px)}
+  /* The zoom is the payoff. Thinning the scrim as well measured 4.22:1 on the
+     body copy, under AA, so it does not thin. */
+  .indcard:hover .indshot{transform:scale(1.1)}
+  .indcard:hover::after{opacity:1}
+  .indcard:hover .indico{border-color:var(--red);background:rgba(225,32,36,.1)}
+  .indcard:hover .indico svg{stroke:var(--red)}
+}
+/* Position in the track, which is the other half of the affordance. */
+.indbar{position:relative;height:2px;margin-block-start:clamp(18px,2.4vh,28px);
+  background:var(--line);border-radius:2px;overflow:hidden}
+.indbar span{position:absolute;inset-block:0;inset-inline-start:0;display:block;
+  width:30%;border-radius:2px;background:linear-gradient(90deg,var(--lp),var(--tm));
+  transform-origin:left;will-change:transform}
+
+/* ---- footprint ------------------------------------------------------- */
+.foot{margin-block-start:clamp(38px,5vh,62px);display:grid;gap:0}
+.fp{display:grid;grid-template-columns:130px minmax(0,1fr) minmax(0,1.1fr);gap:clamp(16px,2vw,34px);
+  align-items:baseline;padding-block:clamp(20px,2.2vw,30px);border-block-start:1px solid var(--line)}
+.fp:last-child{border-block-end:1px solid var(--line)}
+.fp em{font-style:normal;font-family:var(--display);font-size:12.5px;font-weight:500;color:var(--lp)}
+.fp em.q{color:var(--tx4)}
+.fp b{font-family:var(--display);font-weight:400;font-size:clamp(1.1rem,1.9vw,1.6rem);color:var(--tx)}
+.fp p{font-size:14.5px;color:var(--tx3)}
+
+/* ---- education and talent -------------------------------------------- */
+.edu{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
+  gap:clamp(30px,4vw,72px);align-items:center}
+.edulead h2{max-width:19ch}
+
+/* The flywheel: a closed ring, because the content is a closed cycle. */
+.wheel{width:100%;max-width:560px;margin-inline:auto;display:block;overflow:visible}
+.wheeltrack{fill:none;stroke:var(--line);stroke-width:1}
+.wheelglow{opacity:.5}
+/* stroke-dashoffset is paint only, no layout, and a transition rather than
+   keyframes so an interrupted reveal retargets instead of restarting. */
+.wheelrun{fill:none;stroke:url(#wgrad);stroke-width:1.6;stroke-linecap:round;
+  transition:stroke-dashoffset 1.5s var(--out)}
+.wheelnode{fill:var(--bg);stroke:var(--line2);stroke-width:1;
+  transition:fill .5s var(--out),stroke .5s var(--out)}
+.wheellab{fill:var(--tx4);font-family:var(--display);font-size:15px;font-weight:500;
+  transition:fill .5s var(--out)}
+.wheelhit{fill:transparent;stroke:none}
+.wheelarrow{fill:var(--lp);opacity:0;transition:opacity .6s var(--out) 1.45s}
+.wheel[data-in] .wheelrun{stroke-dashoffset:0}
+.wheel[data-in] .wheelarrow{opacity:.92}
+.wheel[data-in] .wheelnode{fill:var(--lp);stroke:var(--lp)}
+.wheel[data-in] .wheellab{fill:var(--tx2)}
+.wheelstep:nth-of-type(2) .wheelnode,.wheelstep:nth-of-type(2) .wheellab{transition-delay:.28s}
+.wheelstep:nth-of-type(3) .wheelnode,.wheelstep:nth-of-type(3) .wheellab{transition-delay:.56s}
+.wheelstep:nth-of-type(4) .wheelnode,.wheelstep:nth-of-type(4) .wheellab{transition-delay:.84s}
+.wheelstep:nth-of-type(5) .wheelnode,.wheelstep:nth-of-type(5) .wheellab{transition-delay:1.12s}
+@media(hover:hover) and (pointer:fine){
+  .wheelstep:hover .wheelnode{fill:var(--red);stroke:var(--red)}
+  .wheelstep:hover .wheellab{fill:var(--tx)}
+}
+
+
+/* ---- contact: type as the interface ----------------------------------
+   Four boxes in a row was Solutions' layout repeated, and the weakest
+   treatment available for the one section whose job is to be clicked. */
+.routes{margin-block-start:clamp(38px,5vh,62px);border-block-start:1px solid var(--line)}
+.route{position:relative;isolation:isolate;display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.02fr) auto;
+  gap:clamp(6px,2.2vw,48px);align-items:center;
+  padding-block:clamp(22px,3vw,42px);padding-inline:clamp(0px,1.4vw,22px);
+  border-block-end:1px solid var(--line);
+  transition:transform .2s var(--out)}
+/* The sweep. inset(0 100% 0 0) collapses the fill to the left edge; taking the
+   right inset to 0 wipes it across. Directional, which a fade is not. */
+.route::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(82,21,161,.34),rgba(145,25,43,.12) 68%,transparent);
+  clip-path:inset(0 100% 0 0);transition:clip-path .44s var(--out)}
+[dir="rtl"] .route::before{
+  background:linear-gradient(270deg,rgba(82,21,161,.34),rgba(145,25,43,.12) 68%,transparent);
+  clip-path:inset(0 0 0 100%)}
+.rtitle{font-family:var(--display);font-weight:300;
+  font-size:clamp(1.35rem,2.8vw,2.4rem);line-height:1.1;letter-spacing:-.028em;
+  color:var(--tx);transition:transform .44s var(--out)}
+.rdesc{font-size:14.5px;color:var(--tx3);max-width:42ch}
+.rgo{justify-self:end;width:38px;height:38px;display:grid;place-items:center;
+  border-radius:50%;border:1px solid var(--line2);
+  transition:border-color .36s var(--out),background-color .36s var(--out),
+    transform .44s var(--out)}
+.rgo svg{width:16px;height:16px;fill:none;stroke:var(--lp);stroke-width:1.5;
+  stroke-linecap:round;stroke-linejoin:round;transition:stroke .36s var(--out)}
+.route:focus-visible{outline:2px solid var(--lp);outline-offset:-3px}
+.route:focus-visible .rgo{border-color:var(--lp)}
+/* Tactile feedback: the row answers a press, not just a hover. */
+.route:active{transform:scale(.995)}
+@media(hover:hover) and (pointer:fine){
+  .route:hover::before{clip-path:inset(0 0 0 0)}
+  [dir="rtl"] .route:hover::before{clip-path:inset(0 0 0 0)}
+  .route:hover .rtitle{transform:translateX(10px)}
+  [dir="rtl"] .route:hover .rtitle{transform:translateX(-10px)}
+  .route:hover .rgo{border-color:var(--red);background:rgba(225,32,36,.12);
+    transform:translateX(5px)}
+  [dir="rtl"] .route:hover .rgo{transform:translateX(-5px)}
+  .route:hover .rgo svg{stroke:var(--red)}
+}
+@media(max-width:860px){
+  .route{grid-template-columns:minmax(0,1fr) auto;row-gap:10px}
+  .rdesc{grid-column:1/-1}
+  .rgo{grid-row:1;grid-column:2}
+}
+@media(hover:hover) and (pointer:fine){
+  .route:hover{background:rgba(82,21,161,.1)}
+  .route:hover i{transform:translateX(4px)}
+}
+
+/* ---- footer ---------------------------------------------------------- */
+footer{border-block-start:1px solid var(--line);padding-block:clamp(48px,6vw,84px) 68px;
+  background:#010004}
+.fcols{display:grid;grid-template-columns:minmax(0,1.55fr) repeat(3,minmax(0,1fr));
+  gap:clamp(30px,3.4vw,62px)}
+.fbrand svg{width:clamp(146px,12vw,184px);height:auto;display:block}
+.ftag{margin-block-start:16px;font-family:var(--display);font-size:15px;color:var(--tx2)}
+.fabout{margin-block-start:12px;font-size:14px;color:var(--tx3);max-width:38ch}
+/* The client wrote this. It is the difference between a footer that is honest
+   about what is missing and one that invents an address and a phone number. */
+.fpending{margin-block-start:24px;border:1px solid var(--line2);border-radius:16px;
+  padding:17px 19px;background:rgba(82,21,161,.1);max-width:42ch}
+.fpending h3{font-family:var(--display);font-weight:500;font-size:13.5px;color:var(--lp)}
+.fpending p{margin-block-start:7px;font-size:13.5px;color:var(--tx3)}
+/* Sentence case, not tracked-out caps: the caps micro-label above every
+   heading is one of the commonest generated-page tells. */
+.fnav h3{font-family:var(--display);font-weight:500;font-size:13.5px;color:var(--tx4)}
+.fnav ul{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:2px}
+.fnav a{display:block;padding-block:7px;font-size:14px;color:var(--tx3);
+  transition:color .26s var(--out)}
+@media(hover:hover) and (pointer:fine){.fnav a:hover{color:var(--lp)}}
+.fbase{margin-block-start:clamp(40px,5vw,66px);padding-block-start:24px;
+  border-block-start:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px 26px;
+  align-items:baseline;justify-content:space-between}
+.fbase p{font-size:13px;color:var(--tx4)}
+@media(max-width:1080px){
+  .fcols{grid-template-columns:1fr 1fr}
+  .fbrand{grid-column:1/-1}
+}
+@media(max-width:600px){.fcols{grid-template-columns:1fr}}
+.flag{position:fixed;inset-block-end:15px;inset-inline-start:15px;z-index:60;font-size:11.5px;
+  color:var(--tx4);background:rgba(6,1,14,.9);border:1px solid var(--line);padding:7px 13px;
+  border-radius:100px}
+
+/* ---- reveal ---------------------------------------------------------- */
+.rv{opacity:0;transform:translateY(14px);transition:opacity .6s var(--out),transform .6s var(--out)}
+.rv[data-in]{opacity:1;transform:none}
+
+/* ---- responsive ------------------------------------------------------ */
+@media(max-width:1080px){
+  /* Below this the dial is unusable, so it stops being a dial. The spokes are
+     list items in the markup already, so dropping the positioning is the whole
+     fallback - no second DOM, no duplicated content. */
+  .capsstage{height:auto}
+  .capsticky{position:static;height:auto;display:block;padding-block:0}
+  .caps{grid-template-columns:1fr;align-items:start}
+  .cappanel{position:static}
+  .capidx{height:auto}
+  .capidx li{position:static;width:auto;max-width:none;opacity:1 !important;
+    transform:none !important;border-block-end:1px solid var(--line)}
+  .capidx li:first-child{border-block-start:1px solid var(--line)}
+  .capidx li[data-on]::before{content:none}
+  .capbtn{width:100%;padding-block:clamp(13px,1.7vw,20px);white-space:normal}
+  .edu{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  /* A phone shows about a quarter of this image's width. Centred, that quarter
+     falls between the two figures and loses the engineer entirely. */
+  .bgimg{object-position:72% 50%}
+  .stagebg::before{background:
+    linear-gradient(to right,rgba(6,1,14,.86) 0%,rgba(6,1,14,.44) 56%,rgba(6,1,14,.22) 100%),
+    linear-gradient(to top,rgba(6,1,14,.9) 0%,transparent 54%)}
+}
+@media(max-width:860px){
+  .figs,.stages,.routes{grid-template-columns:1fr 1fr}
+  /* The rail turns vertical rather than wrapping into an ambiguous grid: a
+     sequence read left-to-right then wrapping reads as four unrelated boxes. */
+  .flow{grid-template-columns:1fr;gap:0}
+  .fstep{padding-block:0 30px;padding-inline-start:30px}
+  .fstep::before{inset-block:6px 0;inset-inline:0 auto;inline-size:1px;height:auto}
+  .fstep::after{inset-block:6px 0;inset-inline:0 auto;inline-size:1px;height:auto;
+    transform:scaleY(0);transform-origin:top}
+  [dir="rtl"] .fstep::after{transform-origin:top}
+  .flow[data-in] .fstep::after{transform:scaleY(1)}
+  .fstep:last-child::before,.fstep:last-child::after{inset-block-end:auto;block-size:18px}
+  .fnode{inset-block-start:0;inset-inline-start:-6px}
+  /* Smaller and pinned to the top on a phone, where each block is short and a
+     bottom-anchored numeral would collide with the one beneath it. */
+  .fbig{inset-block:-6px auto;inset-inline-end:0;font-size:3.6rem}
+  .inds{grid-template-columns:1fr}
+  .ind,.ind:nth-child(1),.ind:nth-child(2),.ind:nth-child(6),.ind:nth-child(7){grid-column:auto}
+  .fp{grid-template-columns:1fr;gap:6px}
+}
+@media(max-width:560px){
+  .figs,.stages{grid-template-columns:1fr}
+}
+
+/* Reduced motion keeps opacity, drops movement. */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition-duration:.01ms !important;animation-duration:.01ms !important}
+  .rv{opacity:1;transform:none}
+  .stmt span{opacity:1}
+  .capsstage{height:auto}
+  .capsticky{position:static;height:auto;display:block}
+  .capidx{height:auto}
+  /* Mandatory snap pulls the view after the finger lets go, which is exactly
+     the kind of movement this preference asks us to stop initiating. Proximity
+     keeps the alignment without taking the scroll off the user. */
+  #nav a{opacity:1 !important;transform:none !important;transition-delay:0s !important}
+  .indtrack{scroll-snap-type:x proximity}
+  .indshot{transform:none !important}
+  /* The ring is simply already closed. The diagram still reads; only the
+     drawing of it is motion. */
+  .wheelrun{stroke-dashoffset:0 !important;transition:none}
+  .wheelnode{fill:var(--lp) !important;stroke:var(--lp) !important}
+  .wheellab{fill:var(--tx2) !important}
+  .wheelarrow{opacity:.92 !important}
+  .route::before{clip-path:inset(0 0 0 0) !important;opacity:0;transition:opacity .2s linear}
+  .route:hover::before{opacity:1}
+  .route:hover .rtitle,.route:hover .rgo{transform:none}
+  .capidx li{position:static;opacity:1 !important;transform:none !important;
+    border-block-end:1px solid var(--line)}
+  .capmedia img{transform:none}
+  .flow .fstep::after{transform:none}
+  .flow .fnode{border-color:var(--lp);background:var(--lp)}
+  .stage::before{transform:scaleX(1)}
+}
+</style>
+</head>
+<body>
+<svg class="defs" aria-hidden="true" focusable="false"><defs>
+    <linearGradient id="tbGrad" gradientUnits="userSpaceOnUse" x1="3033.02" y1="5028.72" x2="7751.55" y2="6845.14">
+      <stop offset="0" stop-color="#393685"/>
+      <stop offset="0.478431" stop-color="#8D2C56"/>
+      <stop offset="1" stop-color="#E22227"/>
+    </linearGradient>
+    <g id="tb-mark">
+      <path fill="url(#tbGrad)" d="M7895.85 6814.85c0,-53.65 -11.06,-100.26 -33.19,-139.8 -22.12,-39.54 -51.07,-69.67 -86.84,-90.38 -35.78,-20.71 -74.38,-31.07 -115.8,-31.07 -41.43,0 -80.02,10.13 -115.8,30.37 -35.77,20.23 -64.72,49.89 -86.85,88.96 -22.12,39.07 -33.18,85.44 -33.18,139.1 0,53.66 11.06,100.73 33.18,141.21 22.13,40.49 51.31,71.32 87.56,92.5 36.24,21.19 74.61,31.77 115.09,31.77 41.42,0 80.02,-10.35 115.8,-31.06 35.77,-20.71 64.72,-51.08 86.84,-91.09 22.13,-40.01 33.19,-86.84 33.19,-140.51zm-4931.49 47.86c122.7,122.7 310.51,122.7 433.21,0 122.69,-122.7 122.69,-310.5 0,-433.2 -122.7,-122.7 -310.51,-122.7 -433.21,0 -115.19,120.19 -115.19,315.51 0,433.2zm1084.94 650.42c117.69,-117.69 122.7,-305.5 5,-428.2l-5 -5.01c-102.67,-102.66 -160.26,-262.92 -160.26,-423.18 -5.01,-160.26 47.57,-325.53 160.26,-438.2l5 -5.02c112.69,-122.69 112.69,-305.49 -5,-428.19 -122.7,-122.69 -310.5,-122.69 -433.2,0 -117.69,117.7 -122.7,305.5 -5.01,428.19l5.01 5.02c102.66,102.66 162.76,262.92 167.77,423.18 5.01,160.25 -47.58,325.52 -160.26,438.2l-5.01 5.01c-112.68,122.7 -112.68,305.5 5.01,423.19 115.19,120.19 310.5,120.19 425.69,5.01zm-1083.62 -1886.95c117.69,117.69 305.49,122.69 428.19,5l5.01 -5c102.66,-102.67 262.92,-160.26 423.18,-160.26 160.26,-5.01 325.53,47.57 438.21,160.26l5.01 5c122.69,112.69 305.49,112.69 428.19,-5 122.69,-122.7 122.69,-310.51 0,-433.2 -117.69,-117.7 -305.5,-122.7 -428.19,-5.01l-5.01 5.01c-102.66,102.66 -262.93,162.76 -423.18,167.76 -160.26,5.01 -325.53,-47.57 -438.21,-160.25l-5.01 -5.01c-122.7,-112.68 -305.49,-112.68 -423.18,5.01 -120.2,115.18 -120.2,310.5 -5.01,425.69zm1735.36 1236.53c-122.7,122.7 -310.51,122.7 -433.21,0 -122.69,-122.7 -122.69,-310.5 0,-433.2 122.7,-122.7 310.51,-122.7 433.21,0 115.18,120.19 115.18,315.51 0,433.2zm2925.09 -448.91c60.25,0 113.68,12.01 160.28,36.01 46.6,24.01 83.08,53.9 109.44,89.68l0 -112.98 162.4 0 0 790.81c0,71.55 -15.07,135.33 -45.19,191.34 -30.12,56.02 -73.67,100.04 -130.63,132.04 -56.95,32.01 -124.97,48.02 -204.05,48.02 -105.45,0 -193,-24.72 -262.66,-74.15 -69.67,-49.42 -109.21,-116.49 -118.62,-201.23l159.57 0c12.24,40.49 38.36,73.2 78.37,98.15 40.01,24.95 87.79,37.42 143.34,37.42 64.96,0 117.44,-19.77 157.45,-59.31 40.01,-39.54 60.02,-96.97 60.02,-172.28l0 -129.92c-27.3,36.71 -64.25,67.55 -110.85,92.49 -46.61,24.95 -99.56,37.43 -158.87,37.43 -67.79,0 -129.69,-17.18 -185.7,-51.54 -56.01,-34.37 -100.26,-82.38 -132.74,-144.05 -32.49,-61.66 -48.73,-131.56 -48.73,-209.7 0,-78.14 16.24,-147.33 48.73,-207.59 32.48,-60.25 76.73,-107.09 132.74,-140.51 56.01,-33.42 117.91,-50.13 185.7,-50.13zm-625.45 125.69c23.54,-39.55 54.84,-70.38 93.91,-92.5 39.07,-22.13 85.43,-33.19 139.1,-33.19l0 166.63 -40.95 0c-63.08,0 -110.86,16.01 -143.34,48.02 -32.48,32.01 -48.72,87.55 -48.72,166.63l0 409.53 -160.98 0 0 -778.1 160.98 0 0 112.98zm-417.86 206.17c-0.94,-59.31 -22.12,-106.85 -63.55,-142.63 -41.42,-35.78 -92.73,-53.66 -153.92,-53.66 -55.54,0 -103.09,17.65 -142.63,52.96 -39.54,35.3 -63.07,83.08 -70.6,143.33l430.7 0zm168.05 50.83c0,29.19 -1.88,55.55 -5.65,79.08l-594.52 0c4.71,62.14 27.77,112.04 69.2,149.69 41.42,37.66 92.26,56.49 152.51,56.49 86.61,0 147.81,-36.24 183.58,-108.74l173.69 0c-23.53,71.56 -66.13,130.16 -127.79,175.82 -61.66,45.66 -138.16,68.49 -229.48,68.49 -74.37,0 -140.98,-16.71 -199.82,-50.13 -58.84,-33.42 -104.97,-80.49 -138.39,-141.22 -33.42,-60.72 -50.13,-131.1 -50.13,-211.12 0,-80.02 16.24,-150.39 48.72,-211.11 32.48,-60.72 78.14,-107.56 136.98,-140.51 58.84,-32.95 126.38,-49.43 202.64,-49.43 73.44,0 138.86,16 196.29,48.01 57.43,32.01 102.15,76.97 134.16,134.87 32,57.89 48.01,124.5 48.01,199.81zm-1155 276.79c54.6,0 97.43,-13.19 128.5,-39.54 31.07,-26.36 46.6,-63.08 46.6,-110.15 0,-48.02 -16.48,-86.14 -49.43,-114.39 -32.94,-28.24 -76.72,-42.36 -131.33,-42.36l-211.82 0 0 306.44 217.48 0zm-217.48 -437.77l199.11 0c52.72,0 93.91,-12 123.57,-36.01 29.65,-24.01 44.48,-58.61 44.48,-103.79 0,-44.25 -14.83,-78.85 -44.48,-103.8 -29.66,-24.95 -70.85,-37.42 -123.57,-37.42l-199.11 0 0 281.02zm364.34 64.96c52.72,9.42 97.44,37.18 134.15,83.32 36.72,46.13 55.07,98.38 55.07,156.75 0,49.89 -12.94,94.85 -38.83,134.86 -25.89,40.01 -63.31,71.55 -112.27,94.61 -48.95,23.07 -105.91,34.6 -170.87,34.6l-392.58 0 0 -981.45 374.22 0c66.85,0 124.27,11.3 172.29,33.89 48.01,22.6 84.25,52.96 108.73,91.09 24.48,38.12 36.72,80.72 36.72,127.8 0,56.48 -15.06,103.55 -45.19,141.21 -30.12,37.66 -70.61,65.43 -121.44,83.32zm3656.5 -630.71c47.24,0 91.6,-11.09 133.06,-33.27 41.46,-22.17 74.97,-55.44 100.52,-99.79 25.55,-44.36 38.33,-98.35 38.33,-161.99 0,-63.64 -12.54,-117.64 -37.61,-161.99 -25.07,-44.36 -57.85,-77.38 -98.35,-99.08 -40.49,-21.69 -84.36,-32.54 -131.61,-32.54 -48.21,0 -92.33,10.85 -132.34,32.54 -40.02,21.7 -72.08,54.72 -96.18,99.08 -24.11,44.35 -36.16,98.35 -36.16,161.99 0,64.6 11.81,119.08 35.43,163.43 23.63,44.36 55.21,77.38 94.74,99.08 39.53,21.69 82.92,32.54 130.17,32.54zm0 115.71c-74.25,0 -141.5,-16.88 -201.77,-50.62 -60.26,-33.75 -107.51,-81.72 -141.73,-143.92 -34.24,-62.19 -51.35,-134.26 -51.35,-216.22 0,-81 17.6,-152.59 52.79,-214.78 35.19,-62.19 83.17,-109.92 143.91,-143.19 60.75,-33.27 128.73,-49.9 203.93,-49.9 75.21,0 143.19,16.63 203.94,49.9 60.75,33.27 108.71,80.75 143.91,142.47 35.19,61.7 52.79,133.54 52.79,215.5 0,81.96 -18.08,154.03 -54.24,216.22 -36.16,62.2 -85.09,110.17 -146.8,143.92 -61.71,33.74 -130.17,50.62 -205.38,50.62zm-812.23 -820.07c96.42,0 174.52,29.16 234.3,87.5 59.78,58.33 89.67,142.46 89.67,252.38l0 467.17 -130.16 0 0 -448.36c0,-79.07 -19.77,-139.57 -59.3,-181.52 -39.54,-41.94 -93.53,-62.92 -161.99,-62.92 -69.43,0 -124.63,21.7 -165.61,65.09 -40.98,43.39 -61.47,106.55 -61.47,189.47l0 438.24 -131.62 0 0 -792.59 131.62 0 0 112.81c26.04,-40.49 61.47,-71.83 106.31,-94.01 44.83,-22.18 94.25,-33.26 148.25,-33.26zm-845.5 0c59.78,0 113.78,12.77 161.99,38.32 48.21,25.56 86.05,63.88 113.54,114.99 27.48,51.1 41.22,113.3 41.22,186.57l0 467.17 -130.18 0 0 -448.36c0,-79.07 -19.76,-139.57 -59.29,-181.52 -39.54,-41.94 -93.53,-62.92 -161.99,-62.92 -69.43,0 -124.63,21.7 -165.61,65.09 -40.98,43.39 -61.47,106.55 -61.47,189.47l0 438.24 -131.61 0 0 -1070.29 131.61 0 0 390.51c26.04,-40.49 61.96,-71.83 107.75,-94.01 45.81,-22.18 97.15,-33.26 154.04,-33.26zm-1247.58 409.31c0,-81.96 16.39,-153.55 49.17,-214.78 32.79,-61.23 78.35,-108.72 136.69,-142.47 58.33,-33.74 125.1,-50.62 200.31,-50.62 97.39,0 177.66,23.63 240.82,70.87 63.15,47.25 104.85,112.82 125.1,196.7l-141.74 0c-13.49,-48.21 -39.77,-86.3 -78.82,-114.26 -39.05,-27.96 -87.5,-41.94 -145.36,-41.94 -75.21,0 -135.95,25.79 -182.24,77.38 -46.28,51.58 -69.42,124.62 -69.42,219.12 0,95.46 23.14,169.22 69.42,221.29 46.29,52.07 107.03,78.1 182.24,78.1 57.86,0 106.07,-13.5 144.63,-40.5 38.57,-27 65.09,-65.56 79.55,-115.7l141.74 0c-21.21,80.99 -63.63,145.83 -127.27,194.53 -63.64,48.69 -143.19,73.04 -238.65,73.04 -75.21,0 -141.98,-16.88 -200.31,-50.62 -58.34,-33.75 -103.9,-81.48 -136.69,-143.19 -32.78,-61.71 -49.17,-134.03 -49.17,-216.95zm-187.42 -56.41c0,-50.14 -11.08,-93.29 -33.26,-129.45 -22.18,-36.15 -52.31,-63.63 -90.4,-82.44 -38.08,-18.8 -80.27,-28.2 -126.55,-28.2 -66.53,0 -123.18,21.21 -169.95,63.64 -46.76,42.43 -73.52,101.24 -80.27,176.45l500.43 0zm135.96 27.48c0,25.07 -1.45,51.59 -4.34,79.55l-633.49 0c4.82,78.1 31.57,139.09 80.26,182.96 48.7,43.87 107.76,65.81 177.18,65.81 56.89,0 104.38,-13.26 142.46,-39.78 38.09,-26.51 64.85,-61.94 80.28,-106.3l141.74 0c-21.22,76.17 -63.64,138.12 -127.28,185.85 -63.64,47.73 -142.7,71.6 -237.2,71.6 -75.21,0 -142.46,-16.88 -201.76,-50.62 -59.3,-33.75 -105.82,-81.72 -139.57,-143.92 -33.75,-62.19 -50.62,-134.26 -50.62,-216.22 0,-81.96 16.39,-153.8 49.17,-215.5 32.78,-61.72 78.83,-109.2 138.13,-142.47 59.3,-33.27 127.52,-49.9 204.65,-49.9 75.21,0 141.74,16.39 199.6,49.18 57.85,32.78 102.45,77.86 133.78,135.23 31.34,57.37 47.01,122.21 47.01,194.53zm-812.24 -581.43l0 107.03 -274.8 0 0 901.07 -131.62 0 0 -901.07 -276.24 0 0 -107.03 682.66 0z"/>
+      <path fill="rgba(237,234,242,.5)" d="M9630.49 5319.6l0 -99.74 -37.24 0 0 -13.26 89.48 0 0 13.26 -37.24 0 0 99.74 -15 0zm67.37 0l0 -113 22.41 0 26.72 79.99c2.48,7.44 4.26,13.02 5.39,16.73 1.29,-4.1 3.32,-10.15 6.06,-18.12l27.19 -78.6 20.02 0 0 113 -14.36 0 0 -94.53 -32.99 94.53 -13.46 0 -32.62 -96.27 0 96.27 -14.36 0z"/>
+    </g>
+  </defs></svg>
+<div class="splash" id="splash" aria-hidden="true">
+  <svg viewBox="2878 5102 6928 2497" role="img" aria-label="TechnoBerg"><use href="#tb-mark"/></svg>
+</div>
+<script>
+/* Inline and synchronous on purpose: it has to decide before the splash paints,
+   otherwise a returning visitor sees a flash of it on every page. */
+(function(){try{
+  if(sessionStorage.getItem("tb-splash")){document.getElementById("splash").hidden=true;}
+  else{sessionStorage.setItem("tb-splash","1");}
+}catch(e){/* private mode: the splash simply plays, which is harmless */}})();
+</script>
+<a class="skip" href="#top">Skip to content</a><header id="hdr"><div class="wrap"><a class="brand" href="#top" aria-label="TechnoBerg, home"><svg viewBox="2878 5102 6928 2497" role="img" aria-label="TechnoBerg"><use href="#tb-mark"/></svg></a><nav id="nav" aria-label="Main"><a href="#technologies">Technologies</a><a href="#products">Products</a><a href="#rnd">R&amp;D</a><a href="#solutions">Solutions</a><a href="#industries">Industries</a><a href="#education">Education</a><a href="#company">Company</a><a href="#contact">Contact</a></nav><div class="tools"><div class="lang" role="group" aria-label="Language"><button type="button" aria-pressed="true">EN</button><button type="button" aria-pressed="false" lang="ar">&#1593;</button></div><a class="cart" href="#technocart" aria-label="TechnoCart, the planned course marketplace"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.2l1.9 8.6a1.8 1.8 0 0 0 1.75 1.4h7.5a1.8 1.8 0 0 0 1.75-1.38L19.8 7.6H6.4"/><circle cx="10" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg></a><button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button></div></div></header><span class="hdrsentinel" id="hdrsentinel" aria-hidden="true"></span><main id="top"><div class="herostage"><div class="bgwrap"><div class="stagebg"><picture><source srcset="hero-field.webp" type="image/webp"><img class="bgimg" src="hero-field.jpg" alt="" decoding="async" fetchpriority="high"></picture><canvas id="field" aria-hidden="true"></canvas></div></div><section class="hero"><div class="wrap"><h1>Exploring <em>Tomorrow&rsquo;s</em> Technologies</h1><p class="lede">We research, engineer and deploy intelligent systems across nine engineering domains, from the research question to a system running in production.</p><div class="acts"><a class="btn" href="#contact">Discuss a project<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn ghost" href="education.html">Explore programmes</a></div></div></section><section class="glasssec" id="company"><div class="wrap"><div class="glass"><p class="stmt" data-reveal>Intelligent systems are becoming infrastructure, and infrastructure has to be answerable. We take a question from research to a system running in production, and publish nothing we cannot evidence.</p><div class="figs"><div class="fig rv"><b data-count="9">0</b><span>engineering domains</span><cite>Website Development Brief</cite></div><div class="fig rv"><b data-count="2">0</b><span>countries of operation</span><cite>Website Development Brief</cite></div><div class="fig rv"><b data-count="25">0</b><span>education programmes</span><cite>Master course list</cite></div><div class="fig rv"><b data-count="3">0</b><span>laboratory models</span><cite>Lab solution schemes</cite></div></div></div></div></section></div><section class="sec" id="technologies"><div class="wrap"><div class="capsstage"><div class="capsticky"><p class="eyebrow">Core technologies</p><h2>The engineering foundation beneath everything we build</h2><div class="caps"><ul class="capidx rv" role="tablist" aria-label="Technology domains"><li data-on role="presentation"><button class="capbtn" type="button" role="tab" id="captab0" aria-controls="cappanel" aria-selected="true" tabindex="0"><i>01</i><span>Computer Vision &amp; Perception</span></button></li><li role="presentation"><button class="capbtn" type="button" role="tab" id="captab1" aria-controls="cappanel" aria-selected="false" tabindex="-1"><i>02</i><span>AI &amp; Machine Intelligence</span></button></li><li role="presentation"><button class="capbtn" type="button" role="tab" id="captab2" aria-controls="cappanel" aria-selected="false" tabindex="-1"><i>03</i><span>Robotics &amp; Autonomous Systems</span></button></li><li role="presentation"><button class="capbtn" type="button" role="tab" id="captab3" aria-controls="cappanel" aria-selected="false" tabindex="-1"><i>04</i><span>Industrial Automation</span></button></li><li role="presentation"><button class="capbtn" type="button" role="tab" id="captab4" aria-controls="cappanel" aria-selected="false" tabindex="-1"><i>05</i><span>Cybersecurity Technologies</span></button></li><li role="presentation"><button class="capbtn" type="button" role="tab" id="captab5" aria-controls="cappanel" aria-selected="false" tabindex="-1"><i>06</i><span>Embedded Systems &amp; IoT</span></button></li><li role="presentation"><button class="capbtn" type="button" role="tab" id="captab6" aria-controls="cappanel" aria-selected="false" tabindex="-1"><i>07</i><span>Custom Software &amp; Cloud</span></button></li><li role="presentation"><button class="capbtn" type="button" role="tab" id="captab7" aria-controls="cappanel" aria-selected="false" tabindex="-1"><i>08</i><span>Autonomous Mobility &amp; Drones</span></button></li><li role="presentation"><button class="capbtn" type="button" role="tab" id="captab8" aria-controls="cappanel" aria-selected="false" tabindex="-1"><i>09</i><span>Space Technology</span></button></li></ul><div class="cappanel rv" id="cappanel" role="tabpanel" aria-labelledby="captab0" tabindex="0"><div class="capmedia"><img src="https://images.unsplash.com/photo-1533746228171-962520811097?w=860&h=540&q=72&auto=format&fit=crop" alt="A camera lens in close-up" loading="eager" decoding="async" data-on><img src="https://images.unsplash.com/photo-1604869515882-4d10fa4b0492?w=860&h=540&q=72&auto=format&fit=crop" alt="Light across a darkened machine room" loading="eager" decoding="async"><img src="https://images.unsplash.com/photo-1716191299980-a6e8827ba10b?w=860&h=540&q=72&auto=format&fit=crop" alt="An industrial robot arm on a line" loading="lazy" decoding="async"><img src="https://images.unsplash.com/photo-1717386255773-1e3037c81788?w=860&h=540&q=72&auto=format&fit=crop" alt="Production machinery in a plant hall" loading="lazy" decoding="async"><img src="https://images.unsplash.com/photo-1594915440248-1e419eba6611?w=860&h=540&q=72&auto=format&fit=crop" alt="Fibre optic cabling into a network switch" loading="lazy" decoding="async"><img src="https://images.unsplash.com/photo-1592659762303-90081d34b277?w=860&h=540&q=72&auto=format&fit=crop" alt="A circuit board in close-up" loading="lazy" decoding="async"><img src="https://images.unsplash.com/photo-1784652852605-6945598f2af3?w=860&h=540&q=72&auto=format&fit=crop" alt="Rows of cabinets in a data centre" loading="lazy" decoding="async"><img src="https://images.unsplash.com/photo-1584598416417-84bd357908ef?w=860&h=540&q=72&auto=format&fit=crop" alt="An uncrewed aircraft in flight" loading="lazy" decoding="async"><img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=860&h=540&q=72&auto=format&fit=crop" alt="Earth seen from orbit" loading="lazy" decoding="async"><span class="capdemo">Demo image</span></div><div class="capbody"><div class="capswap" id="capswap"><h3 id="capname">Computer Vision &amp; Perception</h3><p id="capdesc">Inspection, measurement, navigation and decision-making from visual and depth data.</p></div></div></div></div></div></div></div></section><section class="sec" id="rnd"><div class="wrap"><h2 class="rv">Every project moves through four stages</h2><p class="sub rv">Research status is published honestly, and committed products are kept separate from open research areas.</p><ol class="flow" id="flow"><span class="flowglow" aria-hidden="true"></span><li class="fstep"><span class="fnode"></span><span class="fbig" aria-hidden="true">01</span><b>Research question</b><p>What we do not yet know, written down so it can be answered.</p></li><li class="fstep"><span class="fnode"></span><span class="fbig" aria-hidden="true">02</span><b>Prototype</b><p>The smallest thing that proves the answer holds.</p></li><li class="fstep"><span class="fnode"></span><span class="fbig" aria-hidden="true">03</span><b>Pilot</b><p>Running against real conditions, instrumented and observed.</p></li><li class="fstep"><span class="fnode"></span><span class="fbig" aria-hidden="true">04</span><b>Scalable deployment</b><p>A system in production that someone can be held to.</p></li></ol></div></section><section class="sec" id="industries"><div class="wrap"><h2 class="rv">Industries we engineer for</h2><p class="sub rv">Seven sectors where the engineering has somewhere to land. Scroll across.</p><div class="indtrack" id="indtrack" tabindex="0" role="group" aria-label="Industries, scroll horizontally"><div class="indrail"><article class="indcard"><img class="indshot" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1647427060118-4911c9821b82?w=740&h=700&q=70&auto=format&fit=crop" alt="Robot arms along a production line"><span class="indico" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M3 21v-9l4.5 3v-3l4.5 3v-3l4.5 3V8l4.5 3v10"/></svg></span><h3>Manufacturing &amp; Smart Industry</h3><p>Inspection, automation and predictive maintenance for production environments.</p></article><article class="indcard"><img class="indshot" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1684695749267-233af13276d0?w=740&h=700&q=70&auto=format&fit=crop" alt="Racking and cartons in a warehouse aisle"><span class="indico" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v9l-8 4-8-4V7l8-4z"/><path d="M4 7l8 4 8-4M12 11v10"/></svg></span><h3>Logistics &amp; Warehousing</h3><p>Recognition, sorting and autonomous movement inside distribution operations.</p></article><article class="indcard"><img class="indshot" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1602052577122-f73b9710adba?w=740&h=700&q=70&auto=format&fit=crop" alt="Instrument benches in an empty laboratory"><span class="indico" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v5l-4 9a2 2 0 0 0 1.8 2.9h8.4A2 2 0 0 0 18 17l-4-9V3"/><path d="M7.4 14h9.2"/></svg></span><h3>Education &amp; Research Institutions</h3><p>Laboratories, curriculum and applied project capability.</p></article><article class="indcard"><img class="indshot" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=740&h=700&q=70&auto=format&fit=crop" alt="A city skyline at dusk"><span class="indico" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V11h4v10M11 21V6h4v15M17 21v-7h3v7"/><path d="M13 6V3"/></svg></span><h3>Smart Cities &amp; Public Services</h3><p>Monitoring, safety and service-delivery systems.</p></article><article class="indcard"><img class="indshot" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1413882353314-73389f63b6fd?w=740&h=700&q=70&auto=format&fit=crop" alt="Transmission towers against an open sky"><span class="indico" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M6 21L12 3l6 18"/><path d="M8.7 11h6.6M7.4 16h9.2"/></svg></span><h3>Energy &amp; Infrastructure</h3><p>Condition monitoring, inspection and automation across distributed assets.</p></article><article class="indcard"><img class="indshot" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1516549655169-df83a0774514?w=740&h=700&q=70&auto=format&fit=crop" alt="An empty operating theatre"><span class="indico" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h3.5l2.2-6 3.4 12 2.3-6H21"/></svg></span><h3>Healthcare &amp; Assistive Technology</h3><p>Assistive devices and clinical-support engineering within approved scope.</p></article><article class="indcard"><img class="indshot" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?w=740&h=700&q=70&auto=format&fit=crop" alt="The turbine of an airliner engine"><span class="indico" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.2" cy="14.4" r="4.4"/><path d="M3.9 9.2A9.4 9.4 0 0 1 19.4 11.6"/><circle cx="18.7" cy="6.4" r="1.5"/></svg></span><h3>Aerospace &amp; Autonomous Systems</h3><p>Verified engineering scope only, in autonomy and precision systems.</p></article></div></div><div class="indbar" aria-hidden="true"><span id="indbarfill"></span></div></div></section><section class="sec" id="solutions"><div class="wrap"><h2 class="rv">What business problem can we solve?</h2><p class="sub rv">Ten solution areas, each a route from a business objective to a system that can be measured. Four of them below.</p><div class="stages"><div class="stage rv"><b>AI strategy &amp; intelligent applications</b><p>Turn a business objective into a governed, measurable AI capability.</p></div><div class="stage rv"><b>Robotics &amp; automation integration</b><p>Specify, integrate and commission robotic cells inside existing operations.</p></div><div class="stage rv"><b>Industrial automation, PLC &amp; smart manufacturing</b><p>Process control, interlocks and cell sequencing for production.</p></div><div class="stage rv"><b>Computer vision inspection &amp; analytics</b><p>Replace inconsistent manual inspection with auditable automated checks.</p></div></div></div></section><section class="sec"><div class="wrap"><h2 class="rv">Where the work runs, and where it goes next</h2><div class="foot"><div class="fp rv"><em class="">Operating</em><b>Riyadh, Saudi Arabia</b><p>Engineering and delivery.</p></div><div class="fp rv"><em class="">Operating</em><b>Engineering and research centre</b><p>Applied research, and delivery support.</p></div><div class="fp rv"><em class="q">Soon</em><b>Qatar, United Arab Emirates</b><p>Expansion under discussion.</p></div><div class="fp rv"><em class="q">Future</em><b>Brazil, United States</b><p>A declared direction, not an offering.</p></div></div></div></section><section class="sec" id="education"><div class="wrap"><p class="eyebrow rv">Education and talent</p><div class="edu"><div class="edulead rv"><h2>A supporting vertical, and our talent engine</h2><p class="sub">Twenty-five programmes, four school offerings and three laboratory models. We identify capable people through sustained practical performance, then develop them into engineers and researchers from within.</p><p style="margin-block-start:30px"><a class="btn ghost" href="education.html">Explore programmes</a></p></div><div class="rv"><svg class="wheel" id="wheel" viewBox="0 0 560 420" role="img" aria-label="A closed cycle: Learn, then Build, Validate, Incubate, Hire, and back to Learn."><defs><linearGradient id="wgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B064DA"/><stop offset="1" stop-color="#A83C8A"/></linearGradient><radialGradient id="wglow"><stop offset="0" stop-color="#5215A1" stop-opacity=".34"/><stop offset="1" stop-color="#5215A1" stop-opacity="0"/></radialGradient></defs><circle class="wheelglow" cx="280" cy="200" r="152" fill="url(#wglow)"/><circle class="wheeltrack" cx="280" cy="200" r="132"/><circle class="wheelrun" cx="280" cy="200" r="132" stroke-dasharray="829.4" stroke-dashoffset="829.4" transform="rotate(-90 280 200)"/><path class="wheelarrow" d="M-5.5,-7 L4.5,0 L-5.5,7 L-2.5,0 Z" transform="translate(202.4,93.2) rotate(324)"/><g class="wheelstep"><circle class="wheelhit" cx="280.0" cy="68.0" r="26"/><circle class="wheelnode" cx="280.0" cy="68.0" r="5"/><text class="wheellab" x="280.0" y="32.0" text-anchor="middle" dominant-baseline="middle">Learn</text></g><g class="wheelstep"><circle class="wheelhit" cx="405.5" cy="159.2" r="26"/><circle class="wheelnode" cx="405.5" cy="159.2" r="5"/><text class="wheellab" x="439.8" y="148.1" text-anchor="start" dominant-baseline="middle">Build</text></g><g class="wheelstep"><circle class="wheelhit" cx="357.6" cy="306.8" r="26"/><circle class="wheelnode" cx="357.6" cy="306.8" r="5"/><text class="wheellab" x="378.7" y="335.9" text-anchor="start" dominant-baseline="middle">Validate</text></g><g class="wheelstep"><circle class="wheelhit" cx="202.4" cy="306.8" r="26"/><circle class="wheelnode" cx="202.4" cy="306.8" r="5"/><text class="wheellab" x="181.3" y="335.9" text-anchor="end" dominant-baseline="middle">Incubate</text></g><g class="wheelstep"><circle class="wheelhit" cx="154.5" cy="159.2" r="26"/><circle class="wheelnode" cx="154.5" cy="159.2" r="5"/><text class="wheellab" x="120.2" y="148.1" text-anchor="end" dominant-baseline="middle">Hire</text></g></svg></div></div></div></section><section class="sec" id="contact"><div class="wrap"><h2 class="rv">Four ways to work with TechnoBerg</h2><div class="routes"><a class="route rv" href="#contact-tech"><span class="rtitle">Technology Project</span><span class="rdesc">Discuss an engineering, automation, vision or software project.</span><span class="rgo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg></span></a><a class="route rv" href="#contact-rnd"><span class="rtitle">R&amp;D Collaboration</span><span class="rdesc">Propose co-development, sponsored research or a pilot deployment.</span><span class="rgo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg></span></a><a class="route rv" href="#contact-partner"><span class="rtitle">Business Partnership</span><span class="rdesc">Partnership, distribution, investment or supplier discussions.</span><span class="rgo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg></span></a><a class="route rv" href="#contact-edu"><span class="rtitle">Education Enquiry</span><span class="rdesc">Programmes for individuals, schools, colleges or corporate cohorts.</span><span class="rgo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg></span></a></div></div></section></main><footer><div class="wrap"><div class="fcols"><div class="fbrand"><svg viewBox="2878 5102 6928 2497" role="img" aria-label="TechnoBerg"><use href="#tb-mark"/></svg><p class="ftag">Exploring Tomorrow&rsquo;s Technologies</p><p class="fabout">A global technology, product engineering and applied research company. Education and talent development operate as a focused supporting vertical.</p><div class="fpending"><h3>Awaiting confirmation</h3><p>Legal entity names, registered addresses, corporate email, phone and WhatsApp, social links and CR/VAT details are added once TechnoBerg confirms them.</p></div></div><nav class="fnav" aria-label="Site"><h3>Site</h3><ul><li><a href="#technologies">Technologies</a></li><li><a href="#products">Products</a></li><li><a href="#rnd">R&amp;D</a></li><li><a href="#solutions">Solutions</a></li><li><a href="#industries">Industries</a></li><li><a href="#education">Education</a></li></ul></nav><nav class="fnav" aria-label="Company"><h3>Company</h3><ul><li><a href="#company">About us</a></li><li><a href="#/company/presence">Global presence</a></li><li><a href="#/company/careers">Careers</a></li><li><a href="#/news">News and insights</a></li><li><a href="#contact">Contact</a></li></ul></nav><nav class="fnav" aria-label="Legal"><h3>Legal</h3><ul><li><a href="#/legal/privacy">Privacy Policy</a></li><li><a href="#/legal/terms">Terms and Conditions</a></li><li><a href="#/legal/refunds">Refund Policy</a></li><li><a href="#/legal/cookies">Cookie Policy</a></li><li><a href="#/sitemap">Sitemap</a></li></ul></nav></div><div class="fbase"><p>Riyadh, Saudi Arabia</p><p>&copy; 2026 TechnoBerg. Exploring Tomorrow&rsquo;s Technologies.</p></div></div></footer><div class="flag">Prototype 2.0 &middot; home page</div>
+<script>
+(function(){
+  "use strict";
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+  /* One source of truth for the header height. It was a literal 76 in two
+     places in the dial's travel maths, which would have silently desynced the
+     moment the header changed size - and it just did. */
+  var HDR = parseFloat(getComputedStyle(document.documentElement)
+              .getPropertyValue("--hdr")) || 70;
+
+  /* header solidifies once the hero is behind it */
+  /* Solid state from a sentinel, not a scroll handler. */
+  var hdr = document.getElementById("hdr"), sentinel = document.getElementById("hdrsentinel");
+  if (sentinel && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (es) {
+      hdr.classList.toggle("solid", !es[0].isIntersecting);
+    }).observe(sentinel);
+  } else {
+    addEventListener("scroll", function () {
+      hdr.classList.toggle("solid", scrollY > 40);
+    }, { passive: true });
+  }
+
+  /* mobile sheet */
+  var burger = document.getElementById("burger"), nav = document.getElementById("nav");
+  function setNav(o){ nav.classList.toggle("open", o); burger.setAttribute("aria-expanded", String(o));
+    burger.setAttribute("aria-label", o ? "Close menu" : "Open menu");
+    /* The page used to scroll behind the open sheet. */
+    document.body.style.overflow = o ? "hidden" : "";
+    if (o) { var a = nav.querySelector("a"); if (a) { a.focus(); } } }
+  burger.addEventListener("click", function(){ setNav(!nav.classList.contains("open")); });
+  nav.addEventListener("click", function(e){ if (e.target.closest("a")) setNav(false); });
+  addEventListener("keydown", function(e){ if (e.key === "Escape" && nav.classList.contains("open")){ setNav(false); burger.focus(); }});
+
+  /* Tab used to walk straight out of the open sheet into content nobody could
+     see. The burger is part of the cycle because it is the close button. */
+  addEventListener("keydown", function (e) {
+    if (e.key !== "Tab" || !nav.classList.contains("open")) { return; }
+    var items = [burger].concat([].slice.call(nav.querySelectorAll("a")));
+    var first = items[0], last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  /* Where you are, from the sections themselves. aria-current so the state is
+     announced and not only seen. */
+  (function () {
+    var pairs = [];
+    [].forEach.call(nav.querySelectorAll('a[href^="#"]'), function (a) {
+      var el = document.getElementById(a.getAttribute("href").slice(1));
+      if (el) { pairs.push([a, el]); }
+    });
+    if (!pairs.length || !("IntersectionObserver" in window)) { return; }
+    var now = null;
+    function mark(a) {
+      if (now === a) { return; }
+      if (now) { now.removeAttribute("aria-current"); }
+      if (a) { a.setAttribute("aria-current", "true"); }
+      now = a;
+    }
+    /* The current section is the last one whose top has passed the header
+       line. This depends on neither nav order nor document order, which is
+       what the previous version got wrong: Company sits seventh in the nav and
+       near the top of the page. */
+    function pick() {
+      var line = HDR + 12, best = null, bestTop = -Infinity;
+      pairs.forEach(function (p) {
+        var t = p[1].getBoundingClientRect().top;
+        if (t <= line && t > bestTop) { bestTop = t; best = p[0]; }
+      });
+      mark(best);
+    }
+    var spy = new IntersectionObserver(pick,
+      { rootMargin: "-" + (HDR + 12) + "px 0px -58% 0px" });
+    pairs.forEach(function (p) { spy.observe(p[1]); });
+    var rt = null;
+    addEventListener("resize", function () {
+      if (rt) { return; }
+      rt = requestAnimationFrame(function () { rt = null; pick(); });
+    }, { passive: true });
+  })();
+
+  [].forEach.call(document.querySelectorAll(".lang button"), function(b, i, all){
+    b.addEventListener("click", function(){
+      [].forEach.call(all, function(x){ x.setAttribute("aria-pressed", String(x === b)); });
+      document.documentElement.setAttribute("dir", b.lang === "ar" ? "rtl" : "ltr");
+    });
+  });
+
+  /* reveal + counters + stage rules, one observer for all of them */
+  var io = "IntersectionObserver" in window ? new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (!e.isIntersecting) return;
+      e.target.setAttribute("data-in", "");
+      var c = e.target.querySelector("[data-count]");
+      if (c) count(c);
+      io.unobserve(e.target);
+    });
+  }, {threshold: .18, rootMargin: "0px 0px -8% 0px"}) : null;
+
+  if (io) { [].forEach.call(document.querySelectorAll(".rv, .stage"), function(el, i){
+    el.style.transitionDelay = (Math.min(i % 6, 5) * 50) + "ms";   /* stagger, capped */
+    io.observe(el);
+  }); } else {
+    [].forEach.call(document.querySelectorAll(".rv, .stage"), function(el){ el.setAttribute("data-in",""); });
+    [].forEach.call(document.querySelectorAll("[data-count]"), function(c){ c.textContent = c.getAttribute("data-count"); });
+  }
+
+  function count(el){
+    var to = parseInt(el.getAttribute("data-count"), 10) || 0;
+    if (reduce) { el.textContent = to; return; }
+    var t0 = performance.now(), dur = 900;
+    (function step(now){
+      var p = Math.min(1, (now - t0) / dur);
+      el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+
+  /* statement reveals word by word as it is read */
+  var stmt = document.querySelector("[data-reveal]"), words = null, lastQ = -1;
+  if (stmt) {
+    words = stmt.textContent.trim().split(/\s+/);
+    stmt.innerHTML = words.map(function(w){ return "<span>" + w + "</span>"; }).join(" ");
+    words = [].slice.call(stmt.querySelectorAll("span"));
+  }
+  function reveal(){
+    if (!words || reduce) return;
+    var vh = innerHeight || 800, top = stmt.getBoundingClientRect().top;
+    var p = Math.max(0, Math.min(1, (vh * .92 - top) / (vh * .5)));
+    var q = Math.round(p * 60); if (q === lastQ) return; lastQ = q;
+    var f = q / 60, n = words.length;
+    for (var i = 0; i < n; i++) {
+      var l = Math.max(0, Math.min(1, (f - i / n) * n));
+      words[i].style.opacity = (.22 + .78 * l).toFixed(3);
+    }
+  }
+  if (reduce && words) words.forEach(function(w){ w.style.opacity = 1; });
+
+  var tick = null;
+  addEventListener("scroll", function(){
+    if (tick) return;
+    tick = requestAnimationFrame(function(){ tick = null; reveal(); });
+  }, {passive:true});
+  addEventListener("resize", reveal, {passive:true});
+  reveal();
+
+  /* capabilities index */
+  var DOM = [["computer-vision", "Computer Vision &amp; Perception", "Inspection, measurement, navigation and decision-making from visual and depth data."], ["ai", "AI &amp; Machine Intelligence", "Learning systems, decision support and applied machine intelligence."], ["robotics", "Robotics &amp; Autonomous Systems", "Mobile platforms, manipulators and autonomy stacks."], ["automation", "Industrial Automation", "PLC, HMI and SCADA integration for smart manufacturing."], ["cybersecurity", "Cybersecurity Technologies", "Defensive engineering, security operations and control validation."], ["embedded", "Embedded Systems &amp; IoT", "Firmware, connected devices and edge intelligence."], ["software", "Custom Software &amp; Cloud", "Intelligent platforms, APIs and data systems."], ["mobility", "Autonomous Mobility &amp; Drones", "Unmanned platforms and intelligent mobility research."], ["space", "Space Technology", "A declared future direction. No product or service is offered today."]];
+  var items = [].slice.call(document.querySelectorAll(".capidx li"));
+  var swap = document.getElementById("capswap");
+  var nameEl = document.getElementById("capname"), descEl = document.getElementById("capdesc");
+  var cur = 0, swapT = null;
+  function show(i){
+    if (i === cur) return;
+    cur = i;
+    items.forEach(function(li, k){
+      var on = k === i, t = li.querySelector(".capbtn");
+      if (on) li.setAttribute("data-on",""); else li.removeAttribute("data-on");
+      t.setAttribute("aria-selected", String(on));
+      t.setAttribute("tabindex", on ? "0" : "-1");
+    });
+    document.getElementById("cappanel").setAttribute("aria-labelledby", "captab" + i);
+    var shots = document.querySelectorAll(".capmedia img");
+    for (var s = 0; s < shots.length; s++) {
+      if (s === i) shots[s].setAttribute("data-on", ""); else shots[s].removeAttribute("data-on");
+    }
+    if (reduce) { paint(i); return; }
+    swap.classList.add("out");
+    clearTimeout(swapT);
+    swapT = setTimeout(function(){ paint(i); swap.classList.remove("out"); }, 200);
+  }
+  function paint(i){
+    nameEl.innerHTML = DOM[i][1];
+    descEl.innerHTML = DOM[i][2];
+  }
+  var tabs = btns();
+  function btns(){ return [].slice.call(document.querySelectorAll(".capbtn")); }
+  tabs.forEach(function(b, i){
+    b.addEventListener("click", function(){ show(i); b.focus(); });
+    /* No hover activation. Scroll owns this now, and two inputs fighting over
+       one piece of state is how these sections end up flickering. */
+    /* Roving tabindex: one tab stop for the whole set, arrows move within it,
+       which is what a tablist is expected to do. */
+    b.addEventListener("keydown", function(e){
+      var n = null;
+      if (e.key === "ArrowDown" || e.key === "ArrowRight") n = (i + 1) % tabs.length;
+      else if (e.key === "ArrowUp" || e.key === "ArrowLeft") n = (i - 1 + tabs.length) % tabs.length;
+      else if (e.key === "Home") n = 0;
+      else if (e.key === "End") n = tabs.length - 1;
+      if (n === null) return;
+      e.preventDefault();
+      show(n); tabs[n].focus();
+    });
+  });
+
+  /* A slow drift, so the track shows that it moves. Four of the seven cards
+     are off screen until somebody pushes it, and this is what says pushing is
+     possible. It stops under the pointer, under keyboard focus, and whenever
+     the section is not on screen. */
+  (function () {
+    var track = document.getElementById("indtrack");
+    if (!track || reduce) { return; }
+    var SPEED = 26;                 /* px per second: a drift, not a carousel */
+    var dir = 1, hold = 0, held = false, onscreen = false, raf = null, last = 0;
+    /* The authoritative position, kept as a float. Accumulating into
+       scrollLeft itself loses the sub-pixel remainder: at 130fps this drift is
+       under a fifth of a pixel per frame, and the element quantises that away
+       to roughly a quarter of the intended speed. */
+    var at = 0;
+    var handedOver = false;
+    /* Measured: with snapping on, every programmatic scrollLeft write is
+       snapped straight back, under `proximity` exactly as much as under
+       `mandatory`. The drift therefore owns the container with snapping off,
+       and hands it back the moment the reader scrolls for themselves. The CSS
+       keeps mandatory, so with no JS the track still snaps. */
+    track.style.scrollSnapType = "none";
+
+    function handOver() {
+      if (handedOver) { return; }
+      handedOver = true;
+      stop();
+      onscreen = false;
+      track.style.scrollSnapType = "";   /* back to the stylesheet's mandatory */
+    }
+
+    function step(now) {
+      raf = null;
+      var dt = Math.min(0.05, (now - last) / 1000) || 0.016;
+      last = now;
+      var max = track.scrollWidth - track.clientWidth;
+      if (!held && max > 1) {
+        if (hold > 0) { hold -= dt; }
+        else {
+          at += dir * SPEED * dt;
+          if (at < 0) { at = 0; } else if (at > max) { at = max; }
+          track.scrollLeft = at;
+          /* Turn round at each end and wait a beat, so the reversal reads as
+             a pause rather than a bounce. */
+          if (dir > 0 && at >= max - 0.5) { dir = -1; hold = 1.4; }
+          else if (dir < 0 && at <= 0.5) { dir = 1; hold = 1.4; }
+        }
+      }
+      if (onscreen) { raf = requestAnimationFrame(step); }
+    }
+    function run() {
+      if (raf || !onscreen) { return; }
+      last = performance.now();
+      at = track.scrollLeft;          /* resync: the reader may have moved it */
+      raf = requestAnimationFrame(step);
+    }
+    function stop() { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (es) {
+        onscreen = es[0].isIntersecting;
+        if (onscreen) { run(); } else { stop(); }
+      }, { threshold: 0 }).observe(track);
+    } else { onscreen = true; run(); }
+
+    /* Hovering only pauses. It does not restore snapping, so nothing jumps
+       under the cursor. */
+    function pause() { held = true; }
+    function resume() { held = false; run(); }
+    track.addEventListener("pointerenter", pause);
+    track.addEventListener("pointerleave", resume);
+    track.addEventListener("focusin", pause);
+    track.addEventListener("focusout", resume);
+
+    /* Actually scrolling it is taking hold: snapping returns and the drift is
+       finished. Nothing is worse than a track that starts moving again under
+       somebody who deliberately scrolled it. */
+    ["wheel", "touchstart", "pointerdown", "keydown"].forEach(function (ev) {
+      track.addEventListener(ev, handOver, { passive: true });
+    });
+  })();
+
+  /* The position bar. Reads the track's own scroll, throttled through rAF, and
+     writes one transform. Nothing here needs a listener on the window. */
+  (function () {
+    var track = document.getElementById("indtrack");
+    var fill = document.getElementById("indbarfill");
+    if (!track || !fill) { return; }
+    var t = null;
+    function paint() {
+      t = null;
+      var max = track.scrollWidth - track.clientWidth;
+      var shown = track.clientWidth / Math.max(1, track.scrollWidth);
+      var p = max > 0 ? track.scrollLeft / max : 0;
+      /* The thumb is as wide a fraction of the bar as the view is of the
+         track, so it reports how much is off screen as well as where. */
+      fill.style.width = (shown * 100).toFixed(2) + "%";
+      fill.style.transform = "translateX(" + (p * (100 / Math.max(shown, .01) - 100)).toFixed(2) + "%)";
+    }
+    track.addEventListener("scroll", function () {
+      if (t) { return; }
+      t = requestAnimationFrame(paint);
+    }, { passive: true });
+    addEventListener("resize", function () { if (!t) { t = requestAnimationFrame(paint); } },
+      { passive: true });
+    paint();
+  })();
+
+  /* The ring closes once, on arrival, then holds. Same reasoning as the rail:
+     a diagram that keeps re-animating beside text is a distraction, so this
+     unobserves itself the moment it fires. No per-frame work at all - the
+     whole reveal is CSS transitions off the main thread. */
+  var wheel = document.getElementById("wheel");
+  if (wheel) {
+    if (reduce || !("IntersectionObserver" in window)) {
+      wheel.setAttribute("data-in", "");
+    } else {
+      var wio = new IntersectionObserver(function (es) {
+        if (!es[0].isIntersecting) { return; }
+        wheel.setAttribute("data-in", "");
+        wio.disconnect();
+      }, { threshold: .4 });
+      wio.observe(wheel);
+    }
+  }
+
+  /* The rail draws once, on arrival, then holds. A process diagram that keeps
+     re-animating beside text somebody is reading is a distraction, so this
+     unobserves itself the moment it fires. */
+  var flow = document.getElementById("flow");
+  if (flow) {
+    if (reduce || !("IntersectionObserver" in window)) {
+      flow.setAttribute("data-in", "");
+    } else {
+      var fio = new IntersectionObserver(function (es) {
+        if (!es[0].isIntersecting) { return; }
+        flow.setAttribute("data-in", "");
+        fio.disconnect();
+      }, { threshold: .35 });
+      fio.observe(flow);
+    }
+  }
+
+  /* A light drawn along the rail by the pointer. Purpose is explanation: it
+     says the four stages are points on one line rather than four boxes.
+
+     Spring rather than a direct follow. Pinning a visual straight to pointer
+     position has no momentum and reads as something stuck to the cursor; a
+     spring at k=140 d=20 trails slightly and settles without wobble.
+
+     Per frame this writes one transform to one element. The nearest stage is
+     a discrete attribute, so the brightening is CSS. Fine pointers only, and
+     never under reduced motion. */
+  (function () {
+    var flowEl = document.getElementById("flow");
+    /* Not gated on `fine` any more: the arrival sweep runs on touch too, where
+       there is no pointer and the section otherwise shows nothing. */
+    if (!flowEl || reduce) { return; }
+    var glow = flowEl.querySelector(".flowglow");
+    var steps = [].slice.call(flowEl.querySelectorAll(".fstep"));
+    if (!glow || !steps.length) { return; }
+
+    var target = 0, pos = 0, vel = 0, raf = null, last = 0, near = -1, intro = null;
+
+    /* The only thing that writes the beam's position and decides which stage
+       is nearest. Both drivers go through it, so the arrival sweep and the
+       pointer spring cannot disagree about which node is lit. */
+    function place(px) {
+      pos = px;
+      glow.style.transform = "translate3d(" + px.toFixed(1) + "px,0,0)";
+      var best = 0, bd = Infinity, r0 = flowEl.getBoundingClientRect();
+      for (var i = 0; i < steps.length; i++) {
+        var r = steps[i].getBoundingClientRect();
+        var d = Math.abs((r.left - r0.left + r.width / 2) - px);
+        if (d < bd) { bd = d; best = i; }
+      }
+      if (best !== near) {
+        if (near > -1) { steps[near].removeAttribute("data-near"); }
+        steps[best].setAttribute("data-near", "");
+        near = best;
+      }
+    }
+    function clearNear() {
+      if (near > -1) { steps[near].removeAttribute("data-near"); near = -1; }
+    }
+    function stopIntro() { if (intro) { cancelAnimationFrame(intro); intro = null; } }
+
+    function frame(now) {
+      raf = null;
+      var dt = Math.min(0.032, (now - last) / 1000) || 0.016;
+      last = now;
+      vel += ((target - pos) * 140 - vel * 20) * dt;
+      place(pos + vel * dt);
+      if (Math.abs(target - pos) > 0.4 || Math.abs(vel) > 0.4) {
+        raf = requestAnimationFrame(frame);
+      }
+    }
+    function kick() { if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame); } }
+
+    if (fine) {
+      flowEl.addEventListener("pointerenter", function (e) {
+        /* Taking over mid-sweep picks the beam up where it got to rather than
+           snapping it to the cursor. */
+        stopIntro();
+        flowEl.setAttribute("data-live", "");
+        vel = 0;
+        target = e.clientX - flowEl.getBoundingClientRect().left;
+        kick();
+      });
+      flowEl.addEventListener("pointermove", function (e) {
+        target = e.clientX - flowEl.getBoundingClientRect().left;
+        kick();
+      }, { passive: true });
+      flowEl.addEventListener("pointerleave", function () {
+        flowEl.removeAttribute("data-live");
+        clearNear();
+        if (raf) { cancelAnimationFrame(raf); raf = null; }
+      });
+    }
+
+    /* The arrival sweep: the beam runs the rail once, in the direction the
+       process runs, while the rail lights behind it. Horizontal layout only -
+       under 860px the rail is vertical and a beam travelling sideways across
+       it would be nonsense. */
+    if ("IntersectionObserver" in window && matchMedia("(min-width: 861px)").matches) {
+      var gio = new IntersectionObserver(function (es) {
+        if (!es[0].isIntersecting) { return; }
+        gio.disconnect();
+        setTimeout(function () {
+          var w = flowEl.getBoundingClientRect().width;
+          var rtl = document.documentElement.getAttribute("dir") === "rtl";
+          var from = rtl ? w + 40 : -40, to = rtl ? -40 : w + 40;
+          var dur = 880, t0 = 0;
+          flowEl.setAttribute("data-live", "");
+          intro = requestAnimationFrame(function step(now) {
+            if (!t0) { t0 = now; }
+            var p = Math.min(1, (now - t0) / dur);
+            /* easeInOutCubic. Linear across a short rail reads as a hard start
+               and a hard stop. */
+            var e = p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+            place(from + (to - from) * e);
+            if (p < 1) { intro = requestAnimationFrame(step); return; }
+            intro = null;
+            flowEl.removeAttribute("data-live");
+            clearNear();
+            /* Park it back inside the rail once it has faded, so engines
+               without overflow:clip still get no sideways scroll. */
+            setTimeout(function () {
+              if (!flowEl.hasAttribute("data-live")) {
+                glow.style.transform = "translate3d(" + (w / 2).toFixed(1) + "px,0,0)";
+              }
+            }, 420);
+          });
+        }, 220);
+      }, { threshold: .35 });
+      gio.observe(flowEl);
+    }
+  })();
+
+  /* The dial. Scroll turns the arc; whichever spoke is nearest angle zero is
+     the one showing. Positions are computed as coordinates on the circle, so
+     each label needs one transform and stays upright by construction - the
+     alternative, rotating a container and counter-rotating nine labels, is two
+     transforms each and shows as tilted type the moment they disagree.
+
+     Read through rAF rather than doing work in the scroll handler. */
+  (function () {
+    var stage = document.querySelector(".capsstage");
+    var arc = document.querySelector(".capidx");
+    if (!stage || !arc || !items.length) { return; }
+
+    /* An ellipse, not a circle. A true circle wide enough to read as an arc
+       needs a window around 78 degrees, and at radius 430 that puts the end
+       spokes 420px above and below centre - taller than the sticky block has
+       once the heading has taken its share. Separating the radii buys the
+       horizontal sweep without the height: 420 across, 280 down. */
+    var RX = 420, RY = 280, CX = -25, STEP = 22, WINDOW = 78;
+    var wheelOn = false, tick = null;
+
+    function enabled() {
+      return !reduce && matchMedia("(min-width: 1081px)").matches;
+    }
+
+    function place() {
+      tick = null;
+      if (!enabled()) {
+        if (wheelOn) {                       /* hand it back to the list */
+          items.forEach(function (li) { li.style.transform = ""; li.style.opacity = ""; });
+          wheelOn = false;
+        }
+        return;
+      }
+      wheelOn = true;
+      var r = stage.getBoundingClientRect();
+      var travel = stage.offsetHeight - (window.innerHeight - HDR);
+      var p = Math.max(0, Math.min(1, -r.top / Math.max(1, travel)));
+      var rot = -p * (items.length - 1) * STEP;
+
+      var best = 0, bestAbs = Infinity;
+      for (var i = 0; i < items.length; i++) {
+        var a = i * STEP + rot;
+        var abs = Math.abs(a);
+        if (abs < bestAbs) { bestAbs = abs; best = i; }
+        var rad = a * Math.PI / 180;
+        var x = CX + RX * Math.cos(rad);
+        var y = RY * Math.sin(rad);
+        var li = items[i];
+        if (abs > WINDOW + 14) {
+          li.style.opacity = "0";
+          li.style.transform = "translate3d(" + x.toFixed(1) + "px," + y.toFixed(1) + "px,0) translateY(-50%)";
+          continue;
+        }
+        /* Falls away toward the edge of the window rather than cutting off. */
+        /* Squared fell away too fast and left only three spokes readable at
+           once. A gentler curve keeps seven on the arc. */
+        var near = 1 - Math.min(1, abs / WINDOW);
+        li.style.opacity = (0.12 + 0.88 * Math.pow(near, 1.5)).toFixed(3);
+        var s = 0.84 + 0.16 * near;
+        li.style.transform = "translate3d(" + x.toFixed(1) + "px," + y.toFixed(1) + "px,0)"
+          + " translateY(-50%) scale(" + s.toFixed(3) + ")";
+      }
+      if (best !== cur) { show(best); }
+    }
+
+    function onScroll() {
+      if (tick) { return; }
+      tick = requestAnimationFrame(place);
+    }
+    addEventListener("scroll", onScroll, { passive: true });
+    addEventListener("resize", onScroll, { passive: true });
+    place();
+
+    /* Arrow keys move the page to that spoke's position, so the keyboard and
+       the scrollbar cannot disagree about where the dial is. */
+    arc.addEventListener("keydown", function (e) {
+      if (!enabled()) { return; }
+      if (e.key.indexOf("Arrow") !== 0 && e.key !== "Home" && e.key !== "End") { return; }
+      requestAnimationFrame(function () {
+        var i = items.findIndex(function (li) { return li.hasAttribute("data-on"); });
+        if (i < 0) { return; }
+        var travel = stage.offsetHeight - (window.innerHeight - HDR);
+        /* Document coordinate, not offsetTop. offsetTop is measured from the
+           nearest positioned ancestor, and every section here is position:
+           relative, so it reports a couple of hundred pixels instead of a
+           couple of thousand and the keyboard would scroll to the wrong part
+           of the page entirely. */
+        var top0 = stage.getBoundingClientRect().top + window.scrollY;
+        var want = top0 + travel * (i / (items.length - 1));
+        scrollTo({ top: want, behavior: "auto" });
+      });
+    });
+  })();
+
+  /* the hero field: one key light, a bounce, and motes with real depth.
+     Ported from the work already verified on the Django build. */
+  (function(){
+    var cv = document.getElementById("field");
+    if (!cv || !cv.getContext) return;
+    /* The canvas now lives in the sticky layer, but progress has to be read
+       from the whole stage - the sticky element's own rect stops moving, so
+       measuring it would report zero the entire way down. */
+    var bgl = cv.closest(".stagebg"), hero = cv.closest(".herostage"), cx = cv.getContext("2d");
+    var W = 0, H = 0, raf = null, vis = true, t0 = performance.now();
+    var dpr = Math.min(devicePixelRatio || 1, 2);
+    var css = getComputedStyle(document.documentElement);
+    function rgb(n, f){ var h = (css.getPropertyValue(n).trim() || f).replace("#","");
+      return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)]; }
+    var EP = rgb("--ep","#5215A1"), NV = rgb("--nv","#7E35CD"), LP = rgb("--lp","#B064DA"), TM = rgb("--tm","#A83C8A");
+    var LIGHTS = [[.63,.14,.52,EP,.56,.021,.013],[.66,.19,.20,NV,.30,.017,.024],[.10,.94,.34,TM,.16,.013,.018]];
+    var KEY = LIGHTS[0], BUF = .34;
+    var buf = document.createElement("canvas"), bcx = buf.getContext("2d");
+    var ZN = .55, ZF = 7, FOV = .92, pts = [];
+    function mirror(x){ return (document.documentElement.getAttribute("dir")||"") === "rtl" ? 1 - x : x; }
+    function size(){
+      var r = cv.getBoundingClientRect();
+      W = Math.max(1, r.width); H = Math.max(1, r.height);
+      cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+      cx.setTransform(dpr,0,0,dpr,0,0);
+      buf.width = Math.max(1, Math.round(W*BUF)); buf.height = Math.max(1, Math.round(H*BUF));
+      if (!pts.length) for (var i=0;i<150;i++) pts.push({x:(Math.random()*2-1)*1.7, y:(Math.random()*2-1)*1.1,
+        z:ZN+Math.random()*(ZF-ZN), w:.45+Math.random()*.55});
+    }
+    function prog(){ var r = hero.getBoundingClientRect(); return Math.max(0, Math.min(1, -r.top/(r.height||1))); }
+    function draw(){
+      var t = (performance.now()-t0)/1000, sp = prog();
+      cx.clearRect(0,0,W,H);
+      /* No atmosphere pass any more. This used to paint three large additive
+         gradients to BE the hero's lighting. The photograph underneath has its
+         own shaft and its own lit floor, and painting over it would only
+         flatten the thing that makes it worth having. Motes and parallax stay. */
+      var cam = sp*2.6 + t*.013, span = ZF-ZN;
+      var kx = (mirror(KEY[0]) + Math.sin(t*KEY[5])*.03)*W;
+      var ky = (KEY[1] + Math.cos(t*KEY[6])*.024)*H - sp*H*.16;
+      var reach = KEY[2]*Math.max(W,H)*1.15;
+      cx.globalCompositeOperation = "lighter";
+      for (var p, k=0; k<pts.length; k++){
+        p = pts[k];
+        var z = (p.z - cam - ZN) % span; if (z < 0) z += span; z += ZN;
+        var s = FOV/z, sx = W*.5 + p.x*s*W*.5, sy = H*.5 + p.y*s*H*.5 - sp*H*.1;
+        if (sx < -20 || sx > W+20 || sy < -20 || sy > H+20) continue;
+        var d = 1-(z-ZN)/span, a2 = d*d*.72*p.w;
+        var dx = sx-kx, dy = sy-ky, lit = 1 - Math.sqrt(dx*dx+dy*dy)/reach;
+        if (lit <= 0) continue;
+        a2 *= lit*lit; if (a2 < .004) continue;
+        cx.globalAlpha = a2;
+        cx.fillStyle = "rgb("+LP[0]+","+LP[1]+","+LP[2]+")";
+        cx.beginPath(); cx.arc(sx, sy, Math.max(.5, 2.8*s), 0, 6.2832); cx.fill();
+      }
+      cx.globalAlpha = 1; cx.globalCompositeOperation = "source-over";
+    }
+    /* dither, built once - large gradients on a near-black ground band badly */
+    (function(){
+      var g = document.createElement("canvas"); g.width = g.height = 96;
+      var gc = g.getContext("2d"), im = gc.createImageData(96,96), d = im.data;
+      for (var i=0;i<d.length;i+=4){ var v = (Math.random()*255)|0; d[i]=d[i+1]=d[i+2]=v; d[i+3]=10; }
+      gc.putImageData(im,0,0);
+      try { bgl.style.setProperty("--grain","url("+g.toDataURL("image/png")+")"); } catch(e){}
+    })();
+    function loop(){ if (raf) return; raf = requestAnimationFrame(function s(){ raf = null; draw();
+      if (vis && !document.hidden) raf = requestAnimationFrame(s); }); }
+    function stop(){ if (raf){ cancelAnimationFrame(raf); raf = null; } }
+    size(); draw();
+    if (!reduce) {
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(function(es){ vis = es[0].isIntersecting; if (vis) loop(); else stop(); },
+          {threshold:0}).observe(hero);   /* the stage, so it runs across both sections */
+      } else loop();
+      addEventListener("resize", function(){ size(); draw(); }, {passive:true});
+      document.addEventListener("visibilitychange", function(){ if (document.hidden) stop(); else if (vis) loop(); });
+    }
+  })();
+})();
+</script>
+</body>
+</html>
