@@ -9,6 +9,14 @@ Vercel serves `index.html` at the root and the other two pages beside it.
 | `education.html` | Education and talent |
 | `course.html` | Programme detail |
 | `cybersecurity.html` | Cybersecurity products and solutions |
+| `presence.html` | Global presence |
+| `careers.html` | Careers |
+| `news.html` | News and insights |
+| `privacy.html` | Privacy Policy |
+| `terms.html` | Terms and Conditions |
+| `refunds.html` | Refund Policy |
+| `cookies.html` | Cookie Policy |
+| `sitemap.html` | Sitemap |
 
 `hero-field.webp` and `hero-field.jpg` are the hero image. Every other picture
 loads from Unsplash over HTTPS.

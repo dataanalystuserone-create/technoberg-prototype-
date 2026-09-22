@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TechnoBerg - Exploring Tomorrow's Technologies</title>
-<meta name="description" content="Global technology, product engineering and applied R&amp;D company.">
+<title>Careers - TechnoBerg</title>
+<meta name="description" content="Open roles at TechnoBerg, and how to write to us when nothing listed matches you.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Inter:wght@400;500&display=swap">
@@ -803,6 +803,338 @@ footer{border-block-start:1px solid var(--line);padding-block:clamp(48px,6vw,84p
   .stage::before{transform:scaleX(1)}
 }
 </style>
+<style>
+/* =====================================================================
+   Education and course pages. Same tokens, same radii, same accent as the
+   home page; only layouts that the home page does not already use.
+   ===================================================================== */
+
+/* Sub-page hero: an asymmetric split, not the full-bleed still the home page
+   uses. A section page should not pretend to be a front door. */
+.phero{position:relative;overflow:hidden;display:flex;align-items:center;
+  min-height:clamp(520px,72vh,840px);
+  padding-block:calc(var(--hdr) + clamp(60px,10vh,128px)) clamp(60px,9vh,120px)}
+/* width:100% because .phero is a flex container and a flex item shrinks to its
+   content. Without it the copy floats to the middle instead of sitting on the
+   page gutter, and the scrim is then darkest where there is no text. */
+.phero>.wrap{position:relative;z-index:1;width:100%}
+.pherogrid{max-width:64ch}
+.phero h1{font-family:var(--display);font-weight:300;letter-spacing:-.03em;line-height:1.04;
+  font-size:clamp(2.4rem,5.4vw,4.4rem);color:var(--tx)}
+.phero .sub{margin-block-start:20px;max-width:46ch}
+.pheroacts{display:flex;flex-wrap:wrap;gap:12px;margin-block-start:32px}
+
+
+/* ---- shared page hero background --------------------------------------
+   Used by the education, course and cybersecurity heroes. One definition,
+   because a scrim that is wrong is wrong in three places otherwise. */
+.cybg{position:absolute;inset:0;z-index:0}
+.cybg img{width:100%;height:100%;object-fit:cover;display:block}
+/* The scrim is the whole job. A photograph under type is only ever as good as
+   the thing between them. Two layers: a horizontal one, heaviest where the
+   words are and lifting towards the right so the picture stays a picture, and
+   a vertical one that keeps the header legible at the top and ties the band
+   into the page at the bottom. Values measured against these exact crops. */
+.cybg::after{content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(90deg,rgba(6,1,14,.95) 0%,rgba(6,1,14,.9) 40%,
+      rgba(6,1,14,.66) 68%,rgba(6,1,14,.44) 100%),
+    linear-gradient(180deg,rgba(6,1,14,.66) 0%,rgba(6,1,14,.2) 30%,
+      rgba(6,1,14,.34) 72%,var(--bg) 100%)}
+@media(max-width:700px){
+  /* In one column the words run the full width, so a horizontal scrim does
+     nothing useful. Flat and heavier instead. */
+  .cybg::after{background:
+    linear-gradient(180deg,rgba(6,1,14,.84) 0%,rgba(6,1,14,.7) 42%,
+      rgba(6,1,14,.82) 78%,var(--bg) 100%)}
+}
+
+/* ---- seven pathways: a bento with exactly seven cells ----------------
+   3 + 2 + 2 across a six-column grid, so no cell is left blank. Three of the
+   seven carry a photograph, which is what keeps a tile grid from reading as
+   seven boxes of text. */
+.bento{margin-block-start:clamp(36px,5vh,60px);display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(12px,1.2vw,18px)}
+.bcell{position:relative;isolation:isolate;overflow:hidden;
+  grid-column:span 2;min-height:210px;border:1px solid var(--line);border-radius:18px;
+  padding:clamp(22px,2.2vw,32px);display:flex;flex-direction:column;
+  transition:border-color .3s var(--out),transform .3s var(--out)}
+.bcell:nth-child(1),.bcell:nth-child(2){grid-column:span 3;min-height:268px}
+.bcell:nth-child(6),.bcell:nth-child(7){grid-column:span 3}
+.bcell img{position:absolute;inset:0;z-index:0;width:100%;height:100%;object-fit:cover;
+  transform:scale(1.02);transition:transform .62s var(--out)}
+/* Scrim set from a measured sweep across all seven photographs, not by eye.
+   Worst title 5.34:1, worst body 8.21:1. */
+.bcell[data-shot]::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(165deg,rgba(9,9,12,.42),rgba(9,9,12,.9) 48%),
+    linear-gradient(0deg,rgba(9,9,12,.76),transparent 60%)}
+.bcell>*{position:relative;z-index:2}
+.bcell b{font-family:var(--display);font-weight:500;font-size:clamp(1rem,1.3vw,1.24rem);
+  line-height:1.22;color:var(--tx);margin-block-start:auto}
+.bcell p{margin-block-start:10px;font-size:14px;color:var(--tx3);max-width:44ch}
+.bcell i{font-style:normal;font-family:var(--body);font-size:12px;letter-spacing:.04em;
+  color:var(--lp);margin-block-start:14px}
+@media(hover:hover) and (pointer:fine){
+  .bcell:hover{border-color:var(--line2);transform:translateY(-3px)}
+  .bcell:hover img{transform:scale(1.09)}
+}
+@media(max-width:900px){
+  .bento{grid-template-columns:1fr}
+  .bcell,.bcell:nth-child(1),.bcell:nth-child(2),
+  .bcell:nth-child(6),.bcell:nth-child(7){grid-column:span 1;min-height:0}
+}
+
+/* ---- catalogue: filters plus a card grid ----------------------------- */
+.filters{margin-block-start:clamp(30px,4vh,48px);display:grid;gap:14px}
+.frow{display:flex;flex-wrap:wrap;align-items:center;gap:9px}
+.frow>span{font-size:12.5px;color:var(--tx4);min-width:74px}
+.chip{font:inherit;font-size:13px;font-family:var(--display);font-weight:500;
+  padding:8px 15px;min-height:38px;border-radius:100px;cursor:pointer;
+  background:none;border:1px solid var(--line);color:var(--tx3);
+  transition:border-color .22s var(--out),background-color .22s var(--out),color .22s var(--out)}
+.chip[aria-pressed=true]{background:rgba(176,100,218,.18);border-color:var(--line2);color:var(--tx)}
+.chip:focus-visible{outline:2px solid var(--lp);outline-offset:2px}
+@media(hover:hover) and (pointer:fine){.chip:hover{border-color:var(--line2);color:var(--tx2)}}
+.fcount{margin-block-start:18px;font-size:13.5px;color:var(--tx4)}
+.grid{margin-block-start:18px;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:clamp(12px,1.2vw,18px)}
+.ccard{position:relative;display:flex;flex-direction:column;border:1px solid var(--line);
+  border-radius:18px;padding:clamp(20px,2vw,26px);
+  background:linear-gradient(168deg,rgba(82,21,161,.08),transparent 60%);
+  transition:border-color .28s var(--out),transform .28s var(--out)}
+.ccard .cat{font-size:11.5px;letter-spacing:.04em;color:var(--lp)}
+.ccard b{margin-block-start:10px;font-family:var(--display);font-weight:500;
+  font-size:16.5px;line-height:1.26;color:var(--tx)}
+.ccard .ar{margin-block-start:7px;font-size:14px;color:var(--tx4);direction:rtl;
+  unicode-bidi:isolate}
+.ccard .meta{margin-block-start:auto;padding-block-start:16px;display:flex;flex-wrap:wrap;gap:6px 14px;
+  font-size:12.5px;color:var(--tx3)}
+.ccard::after{content:"";position:absolute;inset:0;border-radius:inherit}
+.ccard:focus-within{border-color:var(--lp)}
+@media(hover:hover) and (pointer:fine){
+  .ccard:hover{border-color:var(--line2);transform:translateY(-3px)}
+}
+.ccard a::after{content:"";position:absolute;inset:0}
+.ccard a{color:inherit}
+.ccard a:focus-visible{outline:none}
+.empty{margin-block-start:26px;border:1px dashed var(--line2);border-radius:18px;
+  padding:clamp(28px,4vw,44px);text-align:center}
+.empty b{display:block;font-family:var(--display);font-weight:500;font-size:17px;color:var(--tx)}
+.empty p{margin-block-start:9px;font-size:14px;color:var(--tx3)}
+.empty button{margin-block-start:18px}
+
+/* ---- school offerings: a heading that stays while the list runs ------- */
+.split{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);
+  gap:clamp(28px,4vw,76px);align-items:start}
+.splitside{position:sticky;inset-block-start:calc(var(--hdr) + 28px)}
+.offer{display:grid;gap:0}
+.offer div{padding-block:clamp(20px,2.4vw,30px);border-block-end:1px solid var(--line);
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px clamp(16px,2vw,32px);
+  align-items:baseline}
+.offer div:first-child{border-block-start:1px solid var(--line)}
+.offer b{font-family:var(--display);font-weight:500;font-size:clamp(15px,1.2vw,17px);color:var(--tx)}
+.offer em{grid-column:2;grid-row:1;font-style:normal;font-size:12.5px;color:var(--lp);
+  white-space:nowrap;text-align:end}
+.offer p{grid-column:1/-1;font-size:14px;color:var(--tx3);max-width:56ch}
+@media(max-width:900px){.split{grid-template-columns:1fr}.splitside{position:static}}
+
+/* ---- laboratory models: three tiers that look like three tiers -------- */
+.tiers{margin-block-start:clamp(36px,5vh,60px);display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,1.4vw,20px);align-items:end}
+.tier{border:1px solid var(--line);border-radius:20px;padding:clamp(24px,2.4vw,34px);
+  display:flex;flex-direction:column;
+  transition:border-color .3s var(--out),transform .3s var(--out)}
+/* The step is the point: Basic, Medium, High is an ascending sequence, so the
+   cards ascend. */
+.tier:nth-child(1){min-height:260px}
+.tier:nth-child(2){min-height:300px;background:linear-gradient(170deg,rgba(82,21,161,.1),transparent 64%)}
+.tier:nth-child(3){min-height:344px;background:linear-gradient(170deg,rgba(82,21,161,.2),transparent 66%);
+  border-color:var(--line2)}
+.tier .lvl{font-size:12px;letter-spacing:.05em;color:var(--lp)}
+.tier b{margin-block-start:14px;font-family:var(--display);font-weight:500;
+  font-size:clamp(1.02rem,1.35vw,1.28rem);line-height:1.22;color:var(--tx)}
+.tier p{margin-block-start:11px;font-size:14px;color:var(--tx3)}
+.tier span{margin-block-start:auto;padding-block-start:18px;font-size:13px;color:var(--tx4)}
+@media(hover:hover) and (pointer:fine){.tier:hover{border-color:var(--line2);transform:translateY(-3px)}}
+@media(max-width:860px){.tiers{grid-template-columns:1fr}
+  .tier,.tier:nth-child(1),.tier:nth-child(2),.tier:nth-child(3){min-height:0}}
+
+/* ---- closing band ---------------------------------------------------- */
+.band{margin-block-start:clamp(60px,8vh,110px);border:1px solid var(--line2);border-radius:22px;
+  padding:clamp(32px,4.4vw,62px);background:linear-gradient(140deg,rgba(82,21,161,.18),transparent 66%);
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(20px,3vw,48px);align-items:center}
+.band h2{font-size:clamp(1.5rem,2.6vw,2.2rem)}
+.band p{margin-block-start:12px;font-size:15px;color:var(--tx3);max-width:52ch}
+@media(max-width:860px){.band{grid-template-columns:1fr}}
+
+/* =====================================================================
+   Course page
+   ===================================================================== */
+/* The course header is a banner, not a hero: a detail page is mostly syllabus
+   and a 600px photograph in front of it would be in the way on all twenty-five
+   of them. Same picture treatment, a quarter of the height. */
+.cbanner{position:relative;overflow:hidden;padding-block-end:clamp(26px,4vh,50px)}
+.cbanner>.wrap{position:relative;z-index:1}
+.crumb{padding-block-start:calc(var(--hdr) + 26px);font-size:13px;color:var(--tx4)}
+.crumb a{color:var(--tx3);transition:color .2s var(--out)}
+@media(hover:hover) and (pointer:fine){.crumb a:hover{color:var(--lp)}}
+.chead{padding-block:clamp(22px,3vh,40px) clamp(30px,4vh,54px)}
+.chead h1{font-family:var(--display);font-weight:300;letter-spacing:-.028em;line-height:1.08;
+  font-size:clamp(2rem,4.2vw,3.4rem);color:var(--tx);max-width:22ch}
+/* Right-aligned because it is Arabic, but inside the headline's measure so it
+   reads as a subtitle rather than drifting to the far side of the page. */
+.chead .ar{margin-block-start:14px;font-size:clamp(1rem,1.5vw,1.2rem);color:var(--tx3);
+  direction:rtl;unicode-bidi:isolate;font-weight:400;max-width:min(100%,38ch)}
+/* Exactly five fields, so exactly five tracks. auto-fit built seven here and
+   collapsed two to zero width, leaving their 1px gaps stranded at the edge. */
+.cmeta{margin-block-start:clamp(24px,3vh,36px);display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:16px;overflow:hidden}
+@media(max-width:900px){.cmeta{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.cmeta{grid-template-columns:1fr}}
+.cmeta div{background:var(--bg);padding:clamp(16px,1.8vw,22px)}
+.cmeta dt{font-size:12px;color:var(--tx4)}
+.cmeta dd{margin:8px 0 0;font-family:var(--display);font-weight:500;font-size:15.5px;color:var(--tx)}
+.cbody{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,.85fr);
+  gap:clamp(30px,4vw,72px);align-items:start;padding-block-end:clamp(60px,8vh,110px)}
+@media(max-width:960px){.cbody{grid-template-columns:1fr}}
+/* Syllabus accordion */
+.mods{margin-block-start:22px;border-block-start:1px solid var(--line)}
+.mod{border-block-end:1px solid var(--line)}
+.mod button{width:100%;font:inherit;text-align:start;background:none;border:0;cursor:pointer;
+  color:var(--tx);padding-block:clamp(16px,2vw,22px);display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto auto;gap:10px clamp(12px,1.6vw,22px);
+  align-items:baseline}
+.mod button:focus-visible{outline:2px solid var(--lp);outline-offset:-3px}
+.mod .wk{font-size:12.5px;color:var(--lp);min-width:66px}
+.mod b{font-family:var(--display);font-weight:500;font-size:15.5px;line-height:1.3}
+.mod i{font-style:normal;font-size:12.5px;color:var(--tx4);white-space:nowrap}
+.mod svg{width:17px;height:17px;fill:none;stroke:var(--tx4);stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round;transition:transform .3s var(--out)}
+.mod[data-open] svg{transform:rotate(180deg)}
+.mod>div{display:grid;grid-template-rows:0fr;transition:grid-template-rows .36s var(--out)}
+.mod[data-open]>div{grid-template-rows:1fr}
+.mod>div>p{overflow:hidden;margin:0;font-size:14.5px;color:var(--tx3);max-width:64ch}
+.mod[data-open]>div>p{padding-block-end:clamp(18px,2.2vw,26px)}
+@media(hover:hover) and (pointer:fine){.mod button:hover b{color:var(--lp)}}
+/* Honest state for courses whose syllabus is not published */
+.pending{margin-block-start:22px;border:1px solid var(--line2);border-radius:18px;
+  padding:clamp(22px,2.6vw,32px);background:rgba(82,21,161,.1)}
+.pending b{font-family:var(--display);font-weight:500;font-size:15px;color:var(--lp)}
+.pending p{margin-block-start:9px;font-size:14.5px;color:var(--tx3);max-width:60ch}
+/* Aside */
+.caside{position:sticky;inset-block-start:calc(var(--hdr) + 26px);
+  border:1px solid var(--line);border-radius:20px;padding:clamp(24px,2.6vw,32px);
+  background:linear-gradient(168deg,rgba(82,21,161,.12),transparent 62%)}
+.caside h2{font-family:var(--display);font-weight:500;font-size:17px;color:var(--tx);letter-spacing:0}
+.caside p{margin-block-start:10px;font-size:14px;color:var(--tx3)}
+.caside .btn{margin-block-start:20px;width:100%;justify-content:center}
+.caside ul{list-style:none;margin:22px 0 0;padding:22px 0 0;display:grid;gap:11px;
+  border-block-start:1px solid var(--line);font-size:13.5px;color:var(--tx3)}
+@media(max-width:960px){.caside{position:static}}
+/* Related */
+.rel{padding-block:clamp(50px,7vh,90px);border-block-start:1px solid var(--line)}
+@media (prefers-reduced-motion: reduce){
+  .bcell img{transform:none !important}
+  .mod>div{transition:none}
+}
+</style>
+<style>
+/* ---- document pages ----------------------------------------------------
+   Privacy, Terms, Refunds, Cookies. Reading documents, so typography is the
+   whole design: one measure held near 68 characters, a contents column that
+   marks where you are, and nothing else competing for attention. */
+.dochead{padding-block:calc(var(--hdr) + clamp(48px,8vh,104px)) clamp(26px,3.5vh,44px);
+  border-block-end:1px solid var(--line)}
+.dochead h1{font-family:var(--display);font-weight:300;letter-spacing:-.03em;
+  line-height:1.05;font-size:clamp(2.2rem,4.8vw,3.8rem);color:var(--tx);max-width:18ch}
+.dochead .sub{margin-block-start:18px;max-width:58ch}
+.docdate{margin-block-start:22px;font-size:13px;color:var(--tx4)}
+.docgrid{display:grid;grid-template-columns:minmax(0,15rem) minmax(0,1fr);
+  gap:clamp(30px,5vw,96px);align-items:start;
+  padding-block:clamp(40px,6vh,76px) clamp(56px,9vh,120px)}
+/* The contents column tracks the reading position. Sticky rather than fixed so
+   it stops at the end of the document instead of hanging over the footer. */
+.doctoc{position:sticky;inset-block-start:calc(var(--hdr) + 26px)}
+.doctoc h2{font-family:var(--display);font-weight:500;font-size:13px;color:var(--tx4);
+  letter-spacing:.02em;margin-block-end:14px}
+.doctoc ol{list-style:none;margin:0;padding:0;display:grid;gap:2px;counter-reset:toc}
+.doctoc a{display:flex;gap:10px;padding-block:6px;font-size:14px;color:var(--tx3);
+  transition:color .26s var(--out)}
+.doctoc a::before{counter-increment:toc;content:counter(toc);flex:none;
+  font-variant-numeric:tabular-nums;color:var(--tx4);min-width:1.4ch}
+.doctoc a[aria-current]{color:var(--tx)}
+.doctoc a[aria-current]::before{color:var(--lp)}
+@media(hover:hover) and (pointer:fine){.doctoc a:hover{color:var(--tx)}}
+/* Clauses are numbered because a legal clause is referred to by its number.
+   That is the one case where a numeral carries information rather than
+   decorating a list. */
+/* 55ch, not 68. The ch unit measures the width of a zero, and Inter's zero
+   is wider than its average letter, so 68ch measured 89 characters a line
+   against a guidance of under 80. 55ch measures about 72. Counted with a
+   canvas against the real computed font rather than estimated. */
+.docbody{counter-reset:clause;max-width:55ch}
+.clause{padding-block:clamp(26px,3.4vh,40px);border-block-start:1px solid var(--line)}
+.clause:first-child{border-block-start:0;padding-block-start:0}
+.clause h2{display:flex;gap:14px;font-family:var(--display);font-weight:500;
+  letter-spacing:-.018em;font-size:clamp(1.15rem,1.9vw,1.42rem);color:var(--tx);
+  scroll-margin-block-start:calc(var(--hdr) + 22px)}
+.clause h2::before{counter-increment:clause;content:counter(clause);flex:none;
+  font-variant-numeric:tabular-nums;color:var(--lp);font-weight:400}
+.clause p{margin-block-start:14px;font-size:16px;line-height:1.72;color:var(--tx3)}
+.clause p b{color:var(--tx2);font-weight:500}
+/* Where a real commitment is still the client's to make. Visible on purpose:
+   these are the things that must not reach a live page unresolved. */
+.pend{margin-block-start:18px;border-inline-start:2px solid var(--lp);
+  padding:2px 0 2px 16px;font-size:15px;color:var(--tx4)}
+.pend b{display:block;font-family:var(--display);font-weight:500;font-size:12.5px;
+  color:var(--lp);margin-block-end:5px}
+
+/* ---- sitemap ---------------------------------------------------------- */
+.smap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(24px,3vw,56px);padding-block:clamp(40px,6vh,76px) clamp(56px,9vh,120px)}
+.smap section{break-inside:avoid}
+.smap h2{font-family:var(--display);font-weight:500;font-size:15px;color:var(--tx);
+  padding-block-end:12px;border-block-end:1px solid var(--line2)}
+.smap ul{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:1px}
+.smap a{display:block;padding-block:7px;font-size:14.5px;color:var(--tx3);
+  transition:color .26s var(--out)}
+.smap li span{display:block;padding-block:7px;font-size:14.5px;color:var(--tx4)}
+@media(hover:hover) and (pointer:fine){.smap a:hover{color:var(--lp)}}
+
+/* ---- presence, careers, news ------------------------------------------ */
+.plist{display:grid;gap:0;max-width:96ch}
+.prow{display:grid;grid-template-columns:minmax(0,.52fr) minmax(0,1fr);
+  gap:clamp(16px,2.4vw,46px);padding-block:clamp(22px,2.6vh,32px);
+  border-block-start:1px solid var(--line)}
+.prow:last-child{border-block-end:1px solid var(--line)}
+.prow b{font-family:var(--display);font-weight:500;font-size:17px;color:var(--tx);
+  letter-spacing:-.014em}
+.prow em{display:block;font-style:normal;font-family:var(--display);font-size:12.5px;
+  color:var(--lp);margin-block-end:7px}
+.prow em.q{color:var(--tx4)}
+.prow p{font-size:15.5px;color:var(--tx3);max-width:58ch}
+/* An empty state is an invitation, not an apology. It says what is true, then
+   what to do about it. */
+.empty{margin-block-start:clamp(28px,3.4vw,44px);border:1px solid var(--line);
+  border-radius:24px;padding:6px;background:rgba(237,234,242,.03);max-width:70ch}
+.empty>div{border-radius:18px;padding:clamp(26px,3.2vw,44px);background:rgba(9,4,20,.5);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.empty b{display:block;font-family:var(--display);font-weight:500;
+  font-size:clamp(1.1rem,1.7vw,1.32rem);color:var(--tx);letter-spacing:-.018em}
+.empty p{margin-block-start:12px;font-size:15.5px;color:var(--tx3);max-width:54ch}
+.empty .cyacts{margin-block-start:26px}
+
+@media(max-width:980px){
+  .docgrid{grid-template-columns:1fr;gap:34px}
+  .doctoc{position:static}
+  .smap{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px){
+  .smap{grid-template-columns:1fr}
+  .prow{grid-template-columns:1fr;gap:8px}
+}
+</style>
 </head>
 <body>
 <svg class="defs" aria-hidden="true" focusable="false"><defs>
@@ -815,8 +1147,7 @@ footer{border-block-start:1px solid var(--line);padding-block:clamp(48px,6vw,84p
       <path fill="url(#tbGrad)" d="M7895.85 6814.85c0,-53.65 -11.06,-100.26 -33.19,-139.8 -22.12,-39.54 -51.07,-69.67 -86.84,-90.38 -35.78,-20.71 -74.38,-31.07 -115.8,-31.07 -41.43,0 -80.02,10.13 -115.8,30.37 -35.77,20.23 -64.72,49.89 -86.85,88.96 -22.12,39.07 -33.18,85.44 -33.18,139.1 0,53.66 11.06,100.73 33.18,141.21 22.13,40.49 51.31,71.32 87.56,92.5 36.24,21.19 74.61,31.77 115.09,31.77 41.42,0 80.02,-10.35 115.8,-31.06 35.77,-20.71 64.72,-51.08 86.84,-91.09 22.13,-40.01 33.19,-86.84 33.19,-140.51zm-4931.49 47.86c122.7,122.7 310.51,122.7 433.21,0 122.69,-122.7 122.69,-310.5 0,-433.2 -122.7,-122.7 -310.51,-122.7 -433.21,0 -115.19,120.19 -115.19,315.51 0,433.2zm1084.94 650.42c117.69,-117.69 122.7,-305.5 5,-428.2l-5 -5.01c-102.67,-102.66 -160.26,-262.92 -160.26,-423.18 -5.01,-160.26 47.57,-325.53 160.26,-438.2l5 -5.02c112.69,-122.69 112.69,-305.49 -5,-428.19 -122.7,-122.69 -310.5,-122.69 -433.2,0 -117.69,117.7 -122.7,305.5 -5.01,428.19l5.01 5.02c102.66,102.66 162.76,262.92 167.77,423.18 5.01,160.25 -47.58,325.52 -160.26,438.2l-5.01 5.01c-112.68,122.7 -112.68,305.5 5.01,423.19 115.19,120.19 310.5,120.19 425.69,5.01zm-1083.62 -1886.95c117.69,117.69 305.49,122.69 428.19,5l5.01 -5c102.66,-102.67 262.92,-160.26 423.18,-160.26 160.26,-5.01 325.53,47.57 438.21,160.26l5.01 5c122.69,112.69 305.49,112.69 428.19,-5 122.69,-122.7 122.69,-310.51 0,-433.2 -117.69,-117.7 -305.5,-122.7 -428.19,-5.01l-5.01 5.01c-102.66,102.66 -262.93,162.76 -423.18,167.76 -160.26,5.01 -325.53,-47.57 -438.21,-160.25l-5.01 -5.01c-122.7,-112.68 -305.49,-112.68 -423.18,5.01 -120.2,115.18 -120.2,310.5 -5.01,425.69zm1735.36 1236.53c-122.7,122.7 -310.51,122.7 -433.21,0 -122.69,-122.7 -122.69,-310.5 0,-433.2 122.7,-122.7 310.51,-122.7 433.21,0 115.18,120.19 115.18,315.51 0,433.2zm2925.09 -448.91c60.25,0 113.68,12.01 160.28,36.01 46.6,24.01 83.08,53.9 109.44,89.68l0 -112.98 162.4 0 0 790.81c0,71.55 -15.07,135.33 -45.19,191.34 -30.12,56.02 -73.67,100.04 -130.63,132.04 -56.95,32.01 -124.97,48.02 -204.05,48.02 -105.45,0 -193,-24.72 -262.66,-74.15 -69.67,-49.42 -109.21,-116.49 -118.62,-201.23l159.57 0c12.24,40.49 38.36,73.2 78.37,98.15 40.01,24.95 87.79,37.42 143.34,37.42 64.96,0 117.44,-19.77 157.45,-59.31 40.01,-39.54 60.02,-96.97 60.02,-172.28l0 -129.92c-27.3,36.71 -64.25,67.55 -110.85,92.49 -46.61,24.95 -99.56,37.43 -158.87,37.43 -67.79,0 -129.69,-17.18 -185.7,-51.54 -56.01,-34.37 -100.26,-82.38 -132.74,-144.05 -32.49,-61.66 -48.73,-131.56 -48.73,-209.7 0,-78.14 16.24,-147.33 48.73,-207.59 32.48,-60.25 76.73,-107.09 132.74,-140.51 56.01,-33.42 117.91,-50.13 185.7,-50.13zm-625.45 125.69c23.54,-39.55 54.84,-70.38 93.91,-92.5 39.07,-22.13 85.43,-33.19 139.1,-33.19l0 166.63 -40.95 0c-63.08,0 -110.86,16.01 -143.34,48.02 -32.48,32.01 -48.72,87.55 -48.72,166.63l0 409.53 -160.98 0 0 -778.1 160.98 0 0 112.98zm-417.86 206.17c-0.94,-59.31 -22.12,-106.85 -63.55,-142.63 -41.42,-35.78 -92.73,-53.66 -153.92,-53.66 -55.54,0 -103.09,17.65 -142.63,52.96 -39.54,35.3 -63.07,83.08 -70.6,143.33l430.7 0zm168.05 50.83c0,29.19 -1.88,55.55 -5.65,79.08l-594.52 0c4.71,62.14 27.77,112.04 69.2,149.69 41.42,37.66 92.26,56.49 152.51,56.49 86.61,0 147.81,-36.24 183.58,-108.74l173.69 0c-23.53,71.56 -66.13,130.16 -127.79,175.82 -61.66,45.66 -138.16,68.49 -229.48,68.49 -74.37,0 -140.98,-16.71 -199.82,-50.13 -58.84,-33.42 -104.97,-80.49 -138.39,-141.22 -33.42,-60.72 -50.13,-131.1 -50.13,-211.12 0,-80.02 16.24,-150.39 48.72,-211.11 32.48,-60.72 78.14,-107.56 136.98,-140.51 58.84,-32.95 126.38,-49.43 202.64,-49.43 73.44,0 138.86,16 196.29,48.01 57.43,32.01 102.15,76.97 134.16,134.87 32,57.89 48.01,124.5 48.01,199.81zm-1155 276.79c54.6,0 97.43,-13.19 128.5,-39.54 31.07,-26.36 46.6,-63.08 46.6,-110.15 0,-48.02 -16.48,-86.14 -49.43,-114.39 -32.94,-28.24 -76.72,-42.36 -131.33,-42.36l-211.82 0 0 306.44 217.48 0zm-217.48 -437.77l199.11 0c52.72,0 93.91,-12 123.57,-36.01 29.65,-24.01 44.48,-58.61 44.48,-103.79 0,-44.25 -14.83,-78.85 -44.48,-103.8 -29.66,-24.95 -70.85,-37.42 -123.57,-37.42l-199.11 0 0 281.02zm364.34 64.96c52.72,9.42 97.44,37.18 134.15,83.32 36.72,46.13 55.07,98.38 55.07,156.75 0,49.89 -12.94,94.85 -38.83,134.86 -25.89,40.01 -63.31,71.55 -112.27,94.61 -48.95,23.07 -105.91,34.6 -170.87,34.6l-392.58 0 0 -981.45 374.22 0c66.85,0 124.27,11.3 172.29,33.89 48.01,22.6 84.25,52.96 108.73,91.09 24.48,38.12 36.72,80.72 36.72,127.8 0,56.48 -15.06,103.55 -45.19,141.21 -30.12,37.66 -70.61,65.43 -121.44,83.32zm3656.5 -630.71c47.24,0 91.6,-11.09 133.06,-33.27 41.46,-22.17 74.97,-55.44 100.52,-99.79 25.55,-44.36 38.33,-98.35 38.33,-161.99 0,-63.64 -12.54,-117.64 -37.61,-161.99 -25.07,-44.36 -57.85,-77.38 -98.35,-99.08 -40.49,-21.69 -84.36,-32.54 -131.61,-32.54 -48.21,0 -92.33,10.85 -132.34,32.54 -40.02,21.7 -72.08,54.72 -96.18,99.08 -24.11,44.35 -36.16,98.35 -36.16,161.99 0,64.6 11.81,119.08 35.43,163.43 23.63,44.36 55.21,77.38 94.74,99.08 39.53,21.69 82.92,32.54 130.17,32.54zm0 115.71c-74.25,0 -141.5,-16.88 -201.77,-50.62 -60.26,-33.75 -107.51,-81.72 -141.73,-143.92 -34.24,-62.19 -51.35,-134.26 -51.35,-216.22 0,-81 17.6,-152.59 52.79,-214.78 35.19,-62.19 83.17,-109.92 143.91,-143.19 60.75,-33.27 128.73,-49.9 203.93,-49.9 75.21,0 143.19,16.63 203.94,49.9 60.75,33.27 108.71,80.75 143.91,142.47 35.19,61.7 52.79,133.54 52.79,215.5 0,81.96 -18.08,154.03 -54.24,216.22 -36.16,62.2 -85.09,110.17 -146.8,143.92 -61.71,33.74 -130.17,50.62 -205.38,50.62zm-812.23 -820.07c96.42,0 174.52,29.16 234.3,87.5 59.78,58.33 89.67,142.46 89.67,252.38l0 467.17 -130.16 0 0 -448.36c0,-79.07 -19.77,-139.57 -59.3,-181.52 -39.54,-41.94 -93.53,-62.92 -161.99,-62.92 -69.43,0 -124.63,21.7 -165.61,65.09 -40.98,43.39 -61.47,106.55 -61.47,189.47l0 438.24 -131.62 0 0 -792.59 131.62 0 0 112.81c26.04,-40.49 61.47,-71.83 106.31,-94.01 44.83,-22.18 94.25,-33.26 148.25,-33.26zm-845.5 0c59.78,0 113.78,12.77 161.99,38.32 48.21,25.56 86.05,63.88 113.54,114.99 27.48,51.1 41.22,113.3 41.22,186.57l0 467.17 -130.18 0 0 -448.36c0,-79.07 -19.76,-139.57 -59.29,-181.52 -39.54,-41.94 -93.53,-62.92 -161.99,-62.92 -69.43,0 -124.63,21.7 -165.61,65.09 -40.98,43.39 -61.47,106.55 -61.47,189.47l0 438.24 -131.61 0 0 -1070.29 131.61 0 0 390.51c26.04,-40.49 61.96,-71.83 107.75,-94.01 45.81,-22.18 97.15,-33.26 154.04,-33.26zm-1247.58 409.31c0,-81.96 16.39,-153.55 49.17,-214.78 32.79,-61.23 78.35,-108.72 136.69,-142.47 58.33,-33.74 125.1,-50.62 200.31,-50.62 97.39,0 177.66,23.63 240.82,70.87 63.15,47.25 104.85,112.82 125.1,196.7l-141.74 0c-13.49,-48.21 -39.77,-86.3 -78.82,-114.26 -39.05,-27.96 -87.5,-41.94 -145.36,-41.94 -75.21,0 -135.95,25.79 -182.24,77.38 -46.28,51.58 -69.42,124.62 -69.42,219.12 0,95.46 23.14,169.22 69.42,221.29 46.29,52.07 107.03,78.1 182.24,78.1 57.86,0 106.07,-13.5 144.63,-40.5 38.57,-27 65.09,-65.56 79.55,-115.7l141.74 0c-21.21,80.99 -63.63,145.83 -127.27,194.53 -63.64,48.69 -143.19,73.04 -238.65,73.04 -75.21,0 -141.98,-16.88 -200.31,-50.62 -58.34,-33.75 -103.9,-81.48 -136.69,-143.19 -32.78,-61.71 -49.17,-134.03 -49.17,-216.95zm-187.42 -56.41c0,-50.14 -11.08,-93.29 -33.26,-129.45 -22.18,-36.15 -52.31,-63.63 -90.4,-82.44 -38.08,-18.8 -80.27,-28.2 -126.55,-28.2 -66.53,0 -123.18,21.21 -169.95,63.64 -46.76,42.43 -73.52,101.24 -80.27,176.45l500.43 0zm135.96 27.48c0,25.07 -1.45,51.59 -4.34,79.55l-633.49 0c4.82,78.1 31.57,139.09 80.26,182.96 48.7,43.87 107.76,65.81 177.18,65.81 56.89,0 104.38,-13.26 142.46,-39.78 38.09,-26.51 64.85,-61.94 80.28,-106.3l141.74 0c-21.22,76.17 -63.64,138.12 -127.28,185.85 -63.64,47.73 -142.7,71.6 -237.2,71.6 -75.21,0 -142.46,-16.88 -201.76,-50.62 -59.3,-33.75 -105.82,-81.72 -139.57,-143.92 -33.75,-62.19 -50.62,-134.26 -50.62,-216.22 0,-81.96 16.39,-153.8 49.17,-215.5 32.78,-61.72 78.83,-109.2 138.13,-142.47 59.3,-33.27 127.52,-49.9 204.65,-49.9 75.21,0 141.74,16.39 199.6,49.18 57.85,32.78 102.45,77.86 133.78,135.23 31.34,57.37 47.01,122.21 47.01,194.53zm-812.24 -581.43l0 107.03 -274.8 0 0 901.07 -131.62 0 0 -901.07 -276.24 0 0 -107.03 682.66 0z"/>
       <path fill="rgba(237,234,242,.5)" d="M9630.49 5319.6l0 -99.74 -37.24 0 0 -13.26 89.48 0 0 13.26 -37.24 0 0 99.74 -15 0zm67.37 0l0 -113 22.41 0 26.72 79.99c2.48,7.44 4.26,13.02 5.39,16.73 1.29,-4.1 3.32,-10.15 6.06,-18.12l27.19 -78.6 20.02 0 0 113 -14.36 0 0 -94.53 -32.99 94.53 -13.46 0 -32.62 -96.27 0 96.27 -14.36 0z"/>
     </g>
-  </defs></svg>
-<div class="splash" id="splash" aria-hidden="true">
+  </defs></svg><div class="splash" id="splash" aria-hidden="true">
   <svg viewBox="2878 5102 6928 2497" role="img" aria-label="TechnoBerg"><use href="#tb-mark"/></svg>
 </div>
 <script>
@@ -826,9 +1157,7 @@ footer{border-block-start:1px solid var(--line);padding-block:clamp(48px,6vw,84p
   if(sessionStorage.getItem("tb-splash")){document.getElementById("splash").hidden=true;}
   else{sessionStorage.setItem("tb-splash","1");}
 }catch(e){/* private mode: the splash simply plays, which is harmless */}})();
-</script>
-<a class="skip" href="#top">Skip to content</a><header id="hdr"><div class="wrap"><a class="brand" href="#top" aria-label="TechnoBerg, home"><svg viewBox="2878 5102 6928 2497" role="img" aria-label="TechnoBerg"><use href="#tb-mark"/></svg></a><nav id="nav" aria-label="Main"><a href="#technologies">Technologies</a><a href="#products">Products</a><a href="#rnd">R&amp;D</a><a href="#cybersecurity">Cybersecurity</a><a href="#solutions">Solutions</a><a href="#industries">Industries</a><a href="#education">Education</a><a href="#company">Company</a><a href="#contact">Contact</a></nav><div class="tools"><div class="lang" role="group" aria-label="Language"><button type="button" aria-pressed="true">EN</button><button type="button" aria-pressed="false" lang="ar">&#1593;</button></div><a class="cart" href="#technocart" aria-label="TechnoCart, the planned course marketplace"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.2l1.9 8.6a1.8 1.8 0 0 0 1.75 1.4h7.5a1.8 1.8 0 0 0 1.75-1.38L19.8 7.6H6.4"/><circle cx="10" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg></a><button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button></div></div></header><span class="hdrsentinel" id="hdrsentinel" aria-hidden="true"></span><main id="top"><div class="herostage"><div class="bgwrap"><div class="stagebg"><picture><source srcset="hero-field.webp" type="image/webp"><img class="bgimg" src="hero-field.jpg" alt="" decoding="async" fetchpriority="high"></picture><canvas id="field" aria-hidden="true"></canvas></div></div><section class="hero"><div class="wrap"><h1>Exploring <em>Tomorrow&rsquo;s</em> Technologies</h1><p class="lede">We research, engineer and deploy intelligent systems across nine engineering domains, from the research question to a system running in production.</p><div class="acts"><a class="btn" href="#contact">Discuss a project<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn ghost" href="education.html">Explore programmes</a></div></div></section><section class="glasssec" id="company"><div class="wrap"><div class="glass"><p class="stmt" data-reveal>Intelligent systems are becoming infrastructure, and infrastructure has to be answerable. We take a question from research to a system running in production, and publish nothing we cannot evidence.</p><div class="figs"><div class="fig rv"><b data-count="9">0</b><span>engineering domains</span><cite>Website Development Brief</cite></div><div class="fig rv"><b data-count="2">0</b><span>countries of operation</span><cite>Website Development Brief</cite></div><div class="fig rv"><b data-count="25">0</b><span>education programmes</span><cite>Master course list</cite></div><div class="fig rv"><b data-count="3">0</b><span>laboratory models</span><cite>Lab solution schemes</cite></div></div></div></div></section></div><section class="sec" id="technologies"><div class="wrap"><div class="capsstage"><div class="capsticky"><p class="eyebrow">Core technologies</p><h2>The engineering foundation beneath everything we build</h2><div class="caps"><ul class="capidx rv" role="tablist" aria-label="Technology domains"><li data-on role="presentation"><button class="capbtn" type="button" role="tab" id="captab0" aria-controls="cappanel" aria-selected="true" tabindex="0"><i>01</i><span>Computer Vision &amp; Perception</span></button></li><li role="presentation"><button class="capbtn" type="button" role="tab" id="captab1" aria-controls="cappanel" aria-selected="false" tabindex="-1"><i>02</i><span>AI &amp; Machine Intelligence</span></button></li><li role="presentation"><button class="capbtn" type="button" role="tab" id="captab2" aria-controls="cappanel" aria-selected="false" tabindex="-1"><i>03</i><span>Robotics &amp; Autonomous Systems</span></button></li><li role="presentation"><button class="capbtn" type="button" role="tab" id="captab3" aria-controls="cappanel" aria-selected="false" tabindex="-1"><i>04</i><span>Industrial Automation</span></button></li><li role="presentation"><button class="capbtn" type="button" role="tab" id="captab4" aria-controls="cappanel" aria-selected="false" tabindex="-1"><i>05</i><span>Cybersecurity Technologies</span></button></li><li role="presentation"><button class="capbtn" type="button" role="tab" id="captab5" aria-controls="cappanel" aria-selected="false" tabindex="-1"><i>06</i><span>Embedded Systems &amp; IoT</span></button></li><li role="presentation"><button class="capbtn" type="button" role="tab" id="captab6" aria-controls="cappanel" aria-selected="false" tabindex="-1"><i>07</i><span>Custom Software &amp; Cloud</span></button></li><li role="presentation"><button class="capbtn" type="button" role="tab" id="captab7" aria-controls="cappanel" aria-selected="false" tabindex="-1"><i>08</i><span>Autonomous Mobility &amp; Drones</span></button></li><li role="presentation"><button class="capbtn" type="button" role="tab" id="captab8" aria-controls="cappanel" aria-selected="false" tabindex="-1"><i>09</i><span>Space Technology</span></button></li></ul><div class="cappanel rv" id="cappanel" role="tabpanel" aria-labelledby="captab0" tabindex="0"><div class="capmedia"><img src="https://images.unsplash.com/photo-1533746228171-962520811097?w=860&h=540&q=72&auto=format&fit=crop" alt="A camera lens in close-up" loading="eager" decoding="async" data-on><img src="https://images.unsplash.com/photo-1604869515882-4d10fa4b0492?w=860&h=540&q=72&auto=format&fit=crop" alt="Light across a darkened machine room" loading="eager" decoding="async"><img src="https://images.unsplash.com/photo-1716191299980-a6e8827ba10b?w=860&h=540&q=72&auto=format&fit=crop" alt="An industrial robot arm on a line" loading="lazy" decoding="async"><img src="https://images.unsplash.com/photo-1717386255773-1e3037c81788?w=860&h=540&q=72&auto=format&fit=crop" alt="Production machinery in a plant hall" loading="lazy" decoding="async"><img src="https://images.unsplash.com/photo-1594915440248-1e419eba6611?w=860&h=540&q=72&auto=format&fit=crop" alt="Fibre optic cabling into a network switch" loading="lazy" decoding="async"><img src="https://images.unsplash.com/photo-1592659762303-90081d34b277?w=860&h=540&q=72&auto=format&fit=crop" alt="A circuit board in close-up" loading="lazy" decoding="async"><img src="https://images.unsplash.com/photo-1784652852605-6945598f2af3?w=860&h=540&q=72&auto=format&fit=crop" alt="Rows of cabinets in a data centre" loading="lazy" decoding="async"><img src="https://images.unsplash.com/photo-1584598416417-84bd357908ef?w=860&h=540&q=72&auto=format&fit=crop" alt="An uncrewed aircraft in flight" loading="lazy" decoding="async"><img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=860&h=540&q=72&auto=format&fit=crop" alt="Earth seen from orbit" loading="lazy" decoding="async"><span class="capdemo">Demo image</span></div><div class="capbody"><div class="capswap" id="capswap"><h3 id="capname">Computer Vision &amp; Perception</h3><p id="capdesc">Inspection, measurement, navigation and decision-making from visual and depth data.</p></div></div></div></div></div></div></div></section><section class="sec" id="rnd"><div class="wrap"><h2 class="rv">Every project moves through four stages</h2><p class="sub rv">Research status is published honestly, and committed products are kept separate from open research areas.</p><ol class="flow" id="flow"><span class="flowglow" aria-hidden="true"></span><li class="fstep"><span class="fnode"></span><span class="fbig" aria-hidden="true">01</span><b>Research question</b><p>What we do not yet know, written down so it can be answered.</p></li><li class="fstep"><span class="fnode"></span><span class="fbig" aria-hidden="true">02</span><b>Prototype</b><p>The smallest thing that proves the answer holds.</p></li><li class="fstep"><span class="fnode"></span><span class="fbig" aria-hidden="true">03</span><b>Pilot</b><p>Running against real conditions, instrumented and observed.</p></li><li class="fstep"><span class="fnode"></span><span class="fbig" aria-hidden="true">04</span><b>Scalable deployment</b><p>A system in production that someone can be held to.</p></li></ol></div></section><section class="sec" id="industries"><div class="wrap"><h2 class="rv">Industries we engineer for</h2><p class="sub rv">Seven sectors where the engineering has somewhere to land. Scroll across.</p><div class="indtrack" id="indtrack" tabindex="0" role="group" aria-label="Industries, scroll horizontally"><div class="indrail"><article class="indcard"><img class="indshot" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1647427060118-4911c9821b82?w=740&h=700&q=70&auto=format&fit=crop" alt="Robot arms along a production line"><span class="indico" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M3 21v-9l4.5 3v-3l4.5 3v-3l4.5 3V8l4.5 3v10"/></svg></span><h3>Manufacturing &amp; Smart Industry</h3><p>Inspection, automation and predictive maintenance for production environments.</p></article><article class="indcard"><img class="indshot" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1684695749267-233af13276d0?w=740&h=700&q=70&auto=format&fit=crop" alt="Racking and cartons in a warehouse aisle"><span class="indico" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v9l-8 4-8-4V7l8-4z"/><path d="M4 7l8 4 8-4M12 11v10"/></svg></span><h3>Logistics &amp; Warehousing</h3><p>Recognition, sorting and autonomous movement inside distribution operations.</p></article><article class="indcard"><img class="indshot" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1602052577122-f73b9710adba?w=740&h=700&q=70&auto=format&fit=crop" alt="Instrument benches in an empty laboratory"><span class="indico" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v5l-4 9a2 2 0 0 0 1.8 2.9h8.4A2 2 0 0 0 18 17l-4-9V3"/><path d="M7.4 14h9.2"/></svg></span><h3>Education &amp; Research Institutions</h3><p>Laboratories, curriculum and applied project capability.</p></article><article class="indcard"><img class="indshot" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=740&h=700&q=70&auto=format&fit=crop" alt="A city skyline at dusk"><span class="indico" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V11h4v10M11 21V6h4v15M17 21v-7h3v7"/><path d="M13 6V3"/></svg></span><h3>Smart Cities &amp; Public Services</h3><p>Monitoring, safety and service-delivery systems.</p></article><article class="indcard"><img class="indshot" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1413882353314-73389f63b6fd?w=740&h=700&q=70&auto=format&fit=crop" alt="Transmission towers against an open sky"><span class="indico" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M6 21L12 3l6 18"/><path d="M8.7 11h6.6M7.4 16h9.2"/></svg></span><h3>Energy &amp; Infrastructure</h3><p>Condition monitoring, inspection and automation across distributed assets.</p></article><article class="indcard"><img class="indshot" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1516549655169-df83a0774514?w=740&h=700&q=70&auto=format&fit=crop" alt="An empty operating theatre"><span class="indico" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h3.5l2.2-6 3.4 12 2.3-6H21"/></svg></span><h3>Healthcare &amp; Assistive Technology</h3><p>Assistive devices and clinical-support engineering within approved scope.</p></article><article class="indcard"><img class="indshot" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?w=740&h=700&q=70&auto=format&fit=crop" alt="The turbine of an airliner engine"><span class="indico" aria-hidden="true"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.2" cy="14.4" r="4.4"/><path d="M3.9 9.2A9.4 9.4 0 0 1 19.4 11.6"/><circle cx="18.7" cy="6.4" r="1.5"/></svg></span><h3>Aerospace &amp; Autonomous Systems</h3><p>Verified engineering scope only, in autonomy and precision systems.</p></article></div></div><div class="indbar" aria-hidden="true"><span id="indbarfill"></span></div></div></section><section class="sec" id="solutions"><div class="wrap"><h2 class="rv">What business problem can we solve?</h2><p class="sub rv">Ten solution areas, each a route from a business objective to a system that can be measured. Four of them below.</p><div class="stages"><div class="stage rv"><b>AI strategy &amp; intelligent applications</b><p>Turn a business objective into a governed, measurable AI capability.</p></div><div class="stage rv"><b>Robotics &amp; automation integration</b><p>Specify, integrate and commission robotic cells inside existing operations.</p></div><div class="stage rv"><b>Industrial automation, PLC &amp; smart manufacturing</b><p>Process control, interlocks and cell sequencing for production.</p></div><div class="stage rv"><b>Computer vision inspection &amp; analytics</b><p>Replace inconsistent manual inspection with auditable automated checks.</p></div></div></div></section><section class="sec cyber" id="cybersecurity"><div class="wrap"><div class="cygrid"><div><h2 class="rv">Advanced cybersecurity products and solutions</h2><p class="cylede rv">Protect your business, digital platforms and connected systems with TechnoBerg. We design, develop and deliver advanced cybersecurity solutions around your operational needs, from security assessments and architecture to deployment, testing and ongoing technical support.</p><p class="cylede rv">Our US-based technical team, AM Cyber Security, brings 25 years of experience and leads the delivery of advanced cybersecurity solutions and custom security products.</p><p class="cyteam rv">Technical delivery led and executed by our US-based AM Cyber Security team, with 25 years of experience.</p><div class="cyacts rv"><a class="btn" href="cybersecurity.html#enquiry">Discuss your security requirements<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn ghost" href="cybersecurity.html">Explore cybersecurity solutions</a></div></div><div class="cycards"><article class="cyc rv"><div><b>Custom security products</b><p>Security dashboards, workflows and integrations built around your business and existing systems.</p></div></article><article class="cyc rv"><div><b>Enterprise protection</b><p>Solutions for networks, endpoints, cloud environments, applications, identities and sensitive data.</p></div></article><article class="cyc rv"><div><b>Technical delivery</b><p>Assessment, solution design, deployment, testing and support delivered to an agreed project scope.</p></div></article></div></div></div></section><section class="sec"><div class="wrap"><h2 class="rv">Where the work runs, and where it goes next</h2><div class="foot"><div class="fp rv"><em class="">Operating</em><b>Riyadh, Saudi Arabia</b><p>Engineering and delivery.</p></div><div class="fp rv"><em class="">Operating</em><b>Engineering and research centre</b><p>Applied research, and delivery support.</p></div><div class="fp rv"><em class="q">Soon</em><b>Qatar, United Arab Emirates</b><p>Expansion under discussion.</p></div><div class="fp rv"><em class="q">Future</em><b>Brazil, United States</b><p>A declared direction, not an offering.</p></div></div></div></section><section class="sec" id="education"><div class="wrap"><p class="eyebrow rv">Education and talent</p><div class="edu"><div class="edulead rv"><h2>A supporting vertical, and our talent engine</h2><p class="sub">Twenty-five programmes, four school offerings and three laboratory models. We identify capable people through sustained practical performance, then develop them into engineers and researchers from within.</p><p style="margin-block-start:30px"><a class="btn ghost" href="education.html">Explore programmes</a></p></div><div class="rv"><svg class="wheel" id="wheel" viewBox="0 0 560 420" role="img" aria-label="A closed cycle: Learn, then Build, Validate, Incubate, Hire, and back to Learn."><defs><linearGradient id="wgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B064DA"/><stop offset="1" stop-color="#A83C8A"/></linearGradient><radialGradient id="wglow"><stop offset="0" stop-color="#5215A1" stop-opacity=".34"/><stop offset="1" stop-color="#5215A1" stop-opacity="0"/></radialGradient></defs><circle class="wheelglow" cx="280" cy="200" r="152" fill="url(#wglow)"/><circle class="wheeltrack" cx="280" cy="200" r="132"/><circle class="wheelrun" cx="280" cy="200" r="132" stroke-dasharray="829.4" stroke-dashoffset="829.4" transform="rotate(-90 280 200)"/><path class="wheelarrow" d="M-5.5,-7 L4.5,0 L-5.5,7 L-2.5,0 Z" transform="translate(202.4,93.2) rotate(324)"/><g class="wheelstep"><circle class="wheelhit" cx="280.0" cy="68.0" r="26"/><circle class="wheelnode" cx="280.0" cy="68.0" r="5"/><text class="wheellab" x="280.0" y="32.0" text-anchor="middle" dominant-baseline="middle">Learn</text></g><g class="wheelstep"><circle class="wheelhit" cx="405.5" cy="159.2" r="26"/><circle class="wheelnode" cx="405.5" cy="159.2" r="5"/><text class="wheellab" x="439.8" y="148.1" text-anchor="start" dominant-baseline="middle">Build</text></g><g class="wheelstep"><circle class="wheelhit" cx="357.6" cy="306.8" r="26"/><circle class="wheelnode" cx="357.6" cy="306.8" r="5"/><text class="wheellab" x="378.7" y="335.9" text-anchor="start" dominant-baseline="middle">Validate</text></g><g class="wheelstep"><circle class="wheelhit" cx="202.4" cy="306.8" r="26"/><circle class="wheelnode" cx="202.4" cy="306.8" r="5"/><text class="wheellab" x="181.3" y="335.9" text-anchor="end" dominant-baseline="middle">Incubate</text></g><g class="wheelstep"><circle class="wheelhit" cx="154.5" cy="159.2" r="26"/><circle class="wheelnode" cx="154.5" cy="159.2" r="5"/><text class="wheellab" x="120.2" y="148.1" text-anchor="end" dominant-baseline="middle">Hire</text></g></svg></div></div></div></section><section class="sec" id="contact"><div class="wrap"><h2 class="rv">Four ways to work with TechnoBerg</h2><div class="routes"><a class="route rv" href="#contact-tech"><span class="rtitle">Technology Project</span><span class="rdesc">Discuss an engineering, automation, vision or software project.</span><span class="rgo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg></span></a><a class="route rv" href="#contact-rnd"><span class="rtitle">R&amp;D Collaboration</span><span class="rdesc">Propose co-development, sponsored research or a pilot deployment.</span><span class="rgo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg></span></a><a class="route rv" href="#contact-partner"><span class="rtitle">Business Partnership</span><span class="rdesc">Partnership, distribution, investment or supplier discussions.</span><span class="rgo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg></span></a><a class="route rv" href="#contact-edu"><span class="rtitle">Education Enquiry</span><span class="rdesc">Programmes for individuals, schools, colleges or corporate cohorts.</span><span class="rgo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg></span></a></div></div></section></main><footer><div class="wrap"><div class="fcols"><div class="fbrand"><svg viewBox="2878 5102 6928 2497" role="img" aria-label="TechnoBerg"><use href="#tb-mark"/></svg><p class="ftag">Exploring Tomorrow&rsquo;s Technologies</p><p class="fabout">A global technology, product engineering and applied research company. Education and talent development operate as a focused supporting vertical.</p><address class="faddr"><span class="fentity">Techno Berg Company Ltd</span>4046 Al Thoumamah Road, Ar Rabi District<br>Riyadh 13315 &ndash; 8021<br>Saudi Arabia</address></div><nav class="fnav" aria-label="Site"><h3>Site</h3><ul><li><a href="#technologies">Technologies</a></li><li><a href="#products">Products</a></li><li><a href="#rnd">R&amp;D</a></li><li><a href="#solutions">Solutions</a></li><li><a href="#industries">Industries</a></li><li><a href="#education">Education</a></li><li><a href="cybersecurity.html">Cybersecurity</a></li></ul></nav><nav class="fnav" aria-label="Company"><h3>Company</h3><ul><li><a href="#company">About us</a></li><li><a href="presence.html">Global presence</a></li><li><a href="careers.html">Careers</a></li><li><a href="news.html">News and insights</a></li><li><a href="#contact">Contact</a></li></ul></nav><nav class="fnav" aria-label="Legal"><h3>Legal</h3><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms and Conditions</a></li><li><a href="refunds.html">Refund Policy</a></li><li><a href="cookies.html">Cookie Policy</a></li><li><a href="sitemap.html">Sitemap</a></li></ul></nav></div><div class="fbase"><ul class="fsocial"><li><a href="https://www.instagram.com/technobergksa/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></a></li><li><a href="https://x.com/Technobergksa" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a></li><li><a href="https://www.youtube.com/@TechnoBergksa" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a></li><li><a href="https://www.tiktok.com/@technobergksa" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a></li><li><a href="https://www.snapchat.com/@technobergksa" target="_blank" rel="noopener" aria-label="Snapchat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.299 4.847l-.003.06c-.012.18-.022.345-.03.51.075.045.203.09.401.09.3-.016.659-.12 1.033-.301.165-.088.344-.104.464-.104.182 0 .359.029.509.09.45.149.734.479.734.838.015.449-.39.839-1.213 1.168-.089.029-.209.075-.344.119-.45.135-1.139.36-1.333.81-.09.224-.061.524.12.868l.015.015c.06.136 1.526 3.475 4.791 4.014.255.044.435.27.42.509 0 .075-.015.149-.045.225-.24.569-1.273.988-3.146 1.271-.059.091-.12.375-.164.57-.029.179-.074.36-.134.553-.076.271-.27.405-.555.405h-.03c-.135 0-.313-.031-.538-.074-.36-.075-.765-.135-1.273-.135-.3 0-.599.015-.913.074-.6.104-1.123.464-1.723.884-.853.599-1.826 1.288-3.294 1.288-.06 0-.119-.015-.18-.015h-.149c-1.468 0-2.427-.675-3.279-1.288-.599-.42-1.107-.779-1.707-.884-.314-.045-.629-.074-.928-.074-.54 0-.958.089-1.272.149-.211.043-.391.074-.54.074-.374 0-.523-.224-.583-.42-.061-.192-.09-.389-.135-.567-.046-.181-.105-.494-.166-.57-1.918-.222-2.95-.642-3.189-1.226-.031-.063-.052-.15-.055-.225-.015-.243.165-.465.42-.509 3.264-.54 4.73-3.879 4.791-4.02l.016-.029c.18-.345.224-.645.119-.869-.195-.434-.884-.658-1.332-.809-.121-.029-.24-.074-.346-.119-1.107-.435-1.257-.93-1.197-1.273.09-.479.674-.793 1.168-.793.146 0 .27.029.383.074.42.194.789.3 1.104.3.234 0 .384-.06.465-.105l-.046-.569c-.098-1.626-.225-3.651.307-4.837C7.392 1.077 10.739.807 11.727.807l.419-.015h.06z"/></svg></a></li><li><a href="https://www.threads.com/@technobergksa" target="_blank" rel="noopener" aria-label="Threads"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.75-1.757-.513-.586-1.308-.883-2.359-.89h-.029c-.844 0-1.992.232-2.721 1.32L7.734 7.847c.98-1.454 2.568-2.256 4.478-2.256h.044c3.194.02 5.097 1.975 5.287 5.388.108.046.216.094.321.142 1.49.7 2.58 1.761 3.154 3.07.797 1.82.871 4.79-1.548 7.158-1.85 1.81-4.094 2.628-7.277 2.65Zm1.003-11.69c-.242 0-.487.007-.739.021-1.836.103-2.98.946-2.916 2.143.067 1.256 1.452 1.839 2.784 1.767 1.224-.065 2.818-.543 3.086-3.71a10.5 10.5 0 0 0-2.215-.221z"/></svg></a></li></ul><p>&copy; 2026 Techno Berg Company Ltd. Exploring Tomorrow&rsquo;s Technologies.</p></div></div></footer><div class="flag">Prototype 2.0 &middot; home page</div>
-<script>
+</script><a class="skip" href="#top">Skip to content</a><header id="hdr"><div class="wrap"><a class="brand" href="./" aria-label="TechnoBerg, home"><svg viewBox="2878 5102 6928 2497" role="img" aria-label="TechnoBerg"><use href="#tb-mark"/></svg></a><nav id="nav" aria-label="Main"><a href="index.html#technologies">Technologies</a><a href="index.html#products">Products</a><a href="index.html#rnd">R&amp;D</a><a href="index.html#cybersecurity">Cybersecurity</a><a href="index.html#solutions">Solutions</a><a href="index.html#industries">Industries</a><a href="index.html#education">Education</a><a href="index.html#company">Company</a><a href="index.html#contact">Contact</a></nav><div class="tools"><div class="lang" role="group" aria-label="Language"><button type="button" aria-pressed="true">EN</button><button type="button" aria-pressed="false" lang="ar">&#1593;</button></div><a class="cart" href="index.html#technocart" aria-label="TechnoCart, the planned course marketplace"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.2l1.9 8.6a1.8 1.8 0 0 0 1.75 1.4h7.5a1.8 1.8 0 0 0 1.75-1.38L19.8 7.6H6.4"/><circle cx="10" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg></a><button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button></div></div></header><span class="hdrsentinel" id="hdrsentinel" aria-hidden="true"></span><main id="top"><section class="dochead"><div class="wrap"><h1>Careers</h1><p class="sub">TechnoBerg hires engineers and researchers, and develops people from within through its own programmes.</p></div></section><section class="sec"><div class="wrap"><div class="empty rv"><div><b>No roles are open at the moment</b><p>When a position opens it appears here with the work, the location and what the team is actually short of. Until then, if you build things you are proud of, write to us anyway and tell us what you have built.</p><div class="cyacts"><a class="btn" href="index.html#contact">Send a speculative application<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div></div></div></div></section></main><footer><div class="wrap"><div class="fcols"><div class="fbrand"><svg viewBox="2878 5102 6928 2497" role="img" aria-label="TechnoBerg"><use href="#tb-mark"/></svg><p class="ftag">Exploring Tomorrow&rsquo;s Technologies</p><p class="fabout">A global technology, product engineering and applied research company. Education and talent development operate as a focused supporting vertical.</p><address class="faddr"><span class="fentity">Techno Berg Company Ltd</span>4046 Al Thoumamah Road, Ar Rabi District<br>Riyadh 13315 &ndash; 8021<br>Saudi Arabia</address></div><nav class="fnav" aria-label="Site"><h3>Site</h3><ul><li><a href="index.html#technologies">Technologies</a></li><li><a href="index.html#products">Products</a></li><li><a href="index.html#rnd">R&amp;D</a></li><li><a href="index.html#solutions">Solutions</a></li><li><a href="index.html#industries">Industries</a></li><li><a href="index.html#education">Education</a></li><li><a href="cybersecurity.html">Cybersecurity</a></li></ul></nav><nav class="fnav" aria-label="Company"><h3>Company</h3><ul><li><a href="index.html#company">About us</a></li><li><a href="presence.html">Global presence</a></li><li><a href="careers.html">Careers</a></li><li><a href="news.html">News and insights</a></li><li><a href="index.html#contact">Contact</a></li></ul></nav><nav class="fnav" aria-label="Legal"><h3>Legal</h3><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms and Conditions</a></li><li><a href="refunds.html">Refund Policy</a></li><li><a href="cookies.html">Cookie Policy</a></li><li><a href="sitemap.html">Sitemap</a></li></ul></nav></div><div class="fbase"><ul class="fsocial"><li><a href="https://www.instagram.com/technobergksa/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></a></li><li><a href="https://x.com/Technobergksa" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a></li><li><a href="https://www.youtube.com/@TechnoBergksa" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a></li><li><a href="https://www.tiktok.com/@technobergksa" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a></li><li><a href="https://www.snapchat.com/@technobergksa" target="_blank" rel="noopener" aria-label="Snapchat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.299 4.847l-.003.06c-.012.18-.022.345-.03.51.075.045.203.09.401.09.3-.016.659-.12 1.033-.301.165-.088.344-.104.464-.104.182 0 .359.029.509.09.45.149.734.479.734.838.015.449-.39.839-1.213 1.168-.089.029-.209.075-.344.119-.45.135-1.139.36-1.333.81-.09.224-.061.524.12.868l.015.015c.06.136 1.526 3.475 4.791 4.014.255.044.435.27.42.509 0 .075-.015.149-.045.225-.24.569-1.273.988-3.146 1.271-.059.091-.12.375-.164.57-.029.179-.074.36-.134.553-.076.271-.27.405-.555.405h-.03c-.135 0-.313-.031-.538-.074-.36-.075-.765-.135-1.273-.135-.3 0-.599.015-.913.074-.6.104-1.123.464-1.723.884-.853.599-1.826 1.288-3.294 1.288-.06 0-.119-.015-.18-.015h-.149c-1.468 0-2.427-.675-3.279-1.288-.599-.42-1.107-.779-1.707-.884-.314-.045-.629-.074-.928-.074-.54 0-.958.089-1.272.149-.211.043-.391.074-.54.074-.374 0-.523-.224-.583-.42-.061-.192-.09-.389-.135-.567-.046-.181-.105-.494-.166-.57-1.918-.222-2.95-.642-3.189-1.226-.031-.063-.052-.15-.055-.225-.015-.243.165-.465.42-.509 3.264-.54 4.73-3.879 4.791-4.02l.016-.029c.18-.345.224-.645.119-.869-.195-.434-.884-.658-1.332-.809-.121-.029-.24-.074-.346-.119-1.107-.435-1.257-.93-1.197-1.273.09-.479.674-.793 1.168-.793.146 0 .27.029.383.074.42.194.789.3 1.104.3.234 0 .384-.06.465-.105l-.046-.569c-.098-1.626-.225-3.651.307-4.837C7.392 1.077 10.739.807 11.727.807l.419-.015h.06z"/></svg></a></li><li><a href="https://www.threads.com/@technobergksa" target="_blank" rel="noopener" aria-label="Threads"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.75-1.757-.513-.586-1.308-.883-2.359-.89h-.029c-.844 0-1.992.232-2.721 1.32L7.734 7.847c.98-1.454 2.568-2.256 4.478-2.256h.044c3.194.02 5.097 1.975 5.287 5.388.108.046.216.094.321.142 1.49.7 2.58 1.761 3.154 3.07.797 1.82.871 4.79-1.548 7.158-1.85 1.81-4.094 2.628-7.277 2.65Zm1.003-11.69c-.242 0-.487.007-.739.021-1.836.103-2.98.946-2.916 2.143.067 1.256 1.452 1.839 2.784 1.767 1.224-.065 2.818-.543 3.086-3.71a10.5 10.5 0 0 0-2.215-.221z"/></svg></a></li></ul><p>&copy; 2026 Techno Berg Company Ltd. Exploring Tomorrow&rsquo;s Technologies.</p></div></div></footer><div class="flag">Prototype 2.0 &middot; Careers</div><script>
 (function(){
   "use strict";
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
