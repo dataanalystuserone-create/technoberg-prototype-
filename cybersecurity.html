@@ -811,19 +811,43 @@ footer{border-block-start:1px solid var(--line);padding-block:clamp(48px,6vw,84p
 
 /* Sub-page hero: an asymmetric split, not the full-bleed still the home page
    uses. A section page should not pretend to be a front door. */
-.phero{padding-block:calc(var(--hdr) + clamp(44px,7vh,90px)) clamp(50px,7vh,96px)}
-.pherogrid{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);
-  gap:clamp(30px,4vw,72px);align-items:center}
+.phero{position:relative;overflow:hidden;display:flex;align-items:center;
+  min-height:clamp(520px,72vh,840px);
+  padding-block:calc(var(--hdr) + clamp(60px,10vh,128px)) clamp(60px,9vh,120px)}
+/* width:100% because .phero is a flex container and a flex item shrinks to its
+   content. Without it the copy floats to the middle instead of sitting on the
+   page gutter, and the scrim is then darkest where there is no text. */
+.phero>.wrap{position:relative;z-index:1;width:100%}
+.pherogrid{max-width:64ch}
 .phero h1{font-family:var(--display);font-weight:300;letter-spacing:-.03em;line-height:1.04;
   font-size:clamp(2.4rem,5.4vw,4.4rem);color:var(--tx)}
 .phero .sub{margin-block-start:20px;max-width:46ch}
 .pheroacts{display:flex;flex-wrap:wrap;gap:12px;margin-block-start:32px}
-.pherofig{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:4/3;
-  border:1px solid var(--line)}
-.pherofig img{width:100%;height:100%;object-fit:cover;display:block}
-.pherofig::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(150deg,rgba(9,9,12,.16),rgba(9,9,12,.62))}
-@media(max-width:900px){.pherogrid{grid-template-columns:1fr}.pherofig{aspect-ratio:16/10}}
+
+
+/* ---- shared page hero background --------------------------------------
+   Used by the education, course and cybersecurity heroes. One definition,
+   because a scrim that is wrong is wrong in three places otherwise. */
+.cybg{position:absolute;inset:0;z-index:0}
+.cybg img{width:100%;height:100%;object-fit:cover;display:block}
+/* The scrim is the whole job. A photograph under type is only ever as good as
+   the thing between them. Two layers: a horizontal one, heaviest where the
+   words are and lifting towards the right so the picture stays a picture, and
+   a vertical one that keeps the header legible at the top and ties the band
+   into the page at the bottom. Values measured against these exact crops. */
+.cybg::after{content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(90deg,rgba(6,1,14,.95) 0%,rgba(6,1,14,.9) 40%,
+      rgba(6,1,14,.66) 68%,rgba(6,1,14,.44) 100%),
+    linear-gradient(180deg,rgba(6,1,14,.66) 0%,rgba(6,1,14,.2) 30%,
+      rgba(6,1,14,.34) 72%,var(--bg) 100%)}
+@media(max-width:700px){
+  /* In one column the words run the full width, so a horizontal scrim does
+     nothing useful. Flat and heavier instead. */
+  .cybg::after{background:
+    linear-gradient(180deg,rgba(6,1,14,.84) 0%,rgba(6,1,14,.7) 42%,
+      rgba(6,1,14,.82) 78%,var(--bg) 100%)}
+}
 
 /* ---- seven pathways: a bento with exactly seven cells ----------------
    3 + 2 + 2 across a six-column grid, so no cell is left blank. Three of the
@@ -946,6 +970,11 @@ footer{border-block-start:1px solid var(--line);padding-block:clamp(48px,6vw,84p
 /* =====================================================================
    Course page
    ===================================================================== */
+/* The course header is a banner, not a hero: a detail page is mostly syllabus
+   and a 600px photograph in front of it would be in the way on all twenty-five
+   of them. Same picture treatment, a quarter of the height. */
+.cbanner{position:relative;overflow:hidden;padding-block-end:clamp(26px,4vh,50px)}
+.cbanner>.wrap{position:relative;z-index:1}
 .crumb{padding-block-start:calc(var(--hdr) + 26px);font-size:13px;color:var(--tx4)}
 .crumb a{color:var(--tx3);transition:color .2s var(--out)}
 @media(hover:hover) and (pointer:fine){.crumb a:hover{color:var(--lp)}}
@@ -1019,19 +1048,6 @@ footer{border-block-start:1px solid var(--line);padding-block:clamp(48px,6vw,84p
 .cyhero{position:relative;overflow:hidden;display:flex;align-items:center;
   min-height:clamp(540px,76vh,880px);
   padding-block:clamp(96px,14vh,180px) clamp(84px,12vh,160px)}
-.cybg{position:absolute;inset:0;z-index:0}
-.cybg img{width:100%;height:100%;object-fit:cover;display:block}
-/* The scrim is the whole job. A photograph under type is only ever as good as
-   the thing between them. Two layers: a horizontal one, heaviest where the
-   words are and lifting towards the right so the picture stays a picture, and
-   a vertical one that keeps the header legible at the top and ties the band
-   into the page at the bottom. Values measured against this exact crop. */
-.cybg::after{content:"";position:absolute;inset:0;
-  background:
-    linear-gradient(90deg,rgba(6,1,14,.95) 0%,rgba(6,1,14,.9) 40%,
-      rgba(6,1,14,.66) 68%,rgba(6,1,14,.44) 100%),
-    linear-gradient(180deg,rgba(6,1,14,.66) 0%,rgba(6,1,14,.2) 30%,
-      rgba(6,1,14,.34) 72%,var(--bg) 100%)}
 /* width:100% because .cyhero is a flex container and a flex item shrinks to
    its content. Without it the copy was centred at x=390 instead of sitting
    on the page gutter, so the hero did not line up with any section below
@@ -1042,13 +1058,6 @@ footer{border-block-start:1px solid var(--line);padding-block:clamp(48px,6vw,84p
 .cyhero h1{font-weight:400;font-size:clamp(2.1rem,4.6vw,4.1rem);max-width:17ch;
   letter-spacing:-.03em;line-height:1.03}
 .cyhero .cylede{margin-block-start:24px;max-width:52ch}
-@media(max-width:700px){
-  /* In one column the words run the full width, so a horizontal scrim does
-     nothing useful. Flat and heavier instead. */
-  .cybg::after{background:
-    linear-gradient(180deg,rgba(6,1,14,.84) 0%,rgba(6,1,14,.7) 42%,
-      rgba(6,1,14,.82) 78%,var(--bg) 100%)}
-}
 
 /* Two-column prose. No cards: this is argument, not a list of features. */
 .cyprose{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
